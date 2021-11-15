@@ -52,8 +52,10 @@ public class DriverOrderController {
     @PostMapping("/users/{username}/{id}/wait-client")
     public String waitClient(@PathVariable(value = "username") String username,
                               @PathVariable(value = "id") Integer orderId, Model model) {
+        User user = userService.getUserByUsername(username);
         boolean result = orderService.waitClient(orderId);
         Iterable<Order> orders = orderService.getAvailableOrders();
+        model.addAttribute("user", user);
         model.addAttribute("orders", orders);
         if (!result) {
             model.addAttribute("fail", Constants.SOMETHING_WRONG);
