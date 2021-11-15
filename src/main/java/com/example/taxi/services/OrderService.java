@@ -40,18 +40,16 @@ public class OrderService {
         return orderRepository.findById(id.longValue()).orElse(null);
     }
 
-    public boolean acceptOrder(String username, Integer orderId) {
-        Optional<Order> orderOptional = orderRepository.findById(orderId.longValue());
+    public boolean acceptOrder(String username, Integer id) {
+        Optional<Order> orderOptional = orderRepository.findById(id.longValue());
         Order order = orderOptional.orElse(null);
-        if (order == null) {
-            return false;
-        }
         User driver = userRepository.findByUsername(username);
         assert driver != null;
-        if (Boolean.FALSE.equals(driver.getIsAvailable())) {
+        assert order != null;
+        if (!order.getOrderStatus().equals("ordered") || Boolean.TRUE.equals(!driver.getIsAvailable())) {
             return false;
         }
-        order.setUser(driver);
+        order.setDriver(driver);
         order.setOrderStatus("accepted");
         orderRepository.save(order);
         return true;
@@ -60,9 +58,7 @@ public class OrderService {
     public boolean waitClient(Integer orderId) {
         Optional<Order> orderOptional = orderRepository.findById(orderId.longValue());
         Order order = orderOptional.orElse(null);
-        if (order == null) {
-            return false;
-        }
+        assert order != null;
         if (!order.getOrderStatus().equals("accepted")) {
             return false;
         }
@@ -75,11 +71,11 @@ public class OrderService {
         Optional<Order> orderOptional = orderRepository.findById(id.longValue());
         Order order = orderOptional.orElse(null);
         assert order != null;
-        if (!order.getOrderStatus().equals("ordered")) {
+        if (!order.getOrderStatus().equals("accepted")) {
             return false;
         }
         order.setOrderStatus("started");
-        order.setOrderEndTime(dateTimeFormatter());
+        order.setOrderStartTime(dateTimeFormatter());
         orderRepository.save(order);
         return true;
     }
@@ -160,9 +156,15 @@ public class OrderService {
         return orders;
     }
 
-    public List<Order> getOrdersByUser(Integer id) {
-        Optional<User> userOptional = userRepository.findById(id.longValue());
-        User user = userOptional.orElse(null);
+    public Order getCurrentOrderByUser(User user) {
+        Order order = orderRepository.findByUser(user);
+        if (order == null || !order.getOrderStatus().equals("ordered")) {
+            return null;
+        }
+        return order;
+    }
+
+    public List<Order> getOrdersByUser(User user) {
         List<Order> orders = new ArrayList<>();
         orders.add(orderRepository.findAllByUser(user));
         return orders;

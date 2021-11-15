@@ -33,6 +33,7 @@ public class CarController {
         User user = userService.getUserByUsername(username);
         Car car = carService.getCarByUser(user.getId().intValue());
         if (car != null) {
+            model.addAttribute("failed", Constants.CAR_NOT_FOUND);
             model.addAttribute("car", car);
             return "redirect:/users/{username}/car-page";
         } else {
@@ -54,23 +55,25 @@ public class CarController {
     public String getCarAdding(@PathVariable(value = "username") String username, Model model) {
         User user = userService.getUserByUsername(username);
         model.addAttribute("user", user);
-        return "cars/add";
+        return "cars/add-car";
     }
 
     @PostMapping("/users/{username}/car-add")
     public String createCar(@PathVariable(value = "username") String username,
                             @RequestParam String carNumber, @RequestParam String carModel,
                             @RequestParam String carColor, Model model) {
+        User user = userService.getUserByUsername(username);
         CarRequest carRequest = new CarRequest(carNumber, carModel, carColor);
-        boolean result1 = carService.saveCar(carRequest, username);
-        if (!result1) {
+        boolean result = carService.saveCar(carRequest, username);
+        if (!result) {
             carService.deleteCarByCarNumber(carNumber);
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
-            return "cars/add";
+            model.addAttribute("failed", Constants.ADDING_CAR_FAILED);
+            return "cars/add-car";
         }
         log.info("Car added");
         Car car = carService.getCarByCarNumber(carNumber);
         log.info(car.toString());
+        model.addAttribute("user", user);
         model.addAttribute("car", car);
         return "redirect:/users/{username}/car-page";
     }
@@ -96,7 +99,7 @@ public class CarController {
         log.info("ID: " + id);
         boolean result = carService.updateCar(carRequest);
         if (!result) {
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
+            model.addAttribute("failed", Constants.SOMETHING_WRONG);
             return "cars/edit-car";
         }
         Car car = carService.getCarById(id);
@@ -113,7 +116,7 @@ public class CarController {
         boolean result = carService.deleteCarById(id);
         if (!result) {
             Car car = carService.getCarById(id);
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
+            model.addAttribute("failed", Constants.SOMETHING_WRONG);
             model.addAttribute("car", car);
             return "cars/car-page";
         }

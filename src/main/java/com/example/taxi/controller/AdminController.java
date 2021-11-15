@@ -51,7 +51,7 @@ public class AdminController {
         boolean result = userService.changeStatus(driverStatusRequest);
         User user = userService.getUser(driverId);
         if (!result) {
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
+            model.addAttribute("failed", Constants.SOMETHING_WRONG);
             model.addAttribute("driver", user);
             return "admin/driver-details";
         }
@@ -66,7 +66,7 @@ public class AdminController {
         boolean result = carService.changeTariff(carTariffRequest);
         if (!result) {
             Car car = carService.getCarById(carId);
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
+            model.addAttribute("failed", Constants.SOMETHING_WRONG);
             model.addAttribute("car", car);
             return "redirect:/admin/all-cars";
         }
@@ -179,6 +179,6 @@ public class AdminController {
             return "redirect:/admin/all-users";
         }
         model.addAttribute("order", order);
-        return "orders/order-page";
+        return "user-order";
     }
 }

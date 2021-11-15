@@ -42,7 +42,8 @@ public class DriverController {
                                Model model) {
         User user = userService.getUserByUsername(username);
         if (user == null) {
-            model.addAttribute("failed", Constants.SOMETHING_WRONG);
+            log.info("Nothing about user");
+            model.addAttribute("failed", Constants.USER_NOT_FOUND);
             return "users/user-page";
         }
         model.addAttribute("user", user);
@@ -91,15 +92,19 @@ public class DriverController {
                              @RequestParam String driverLicenseNumber,
                              @RequestParam Date licenseExpDate,
                              Model model) {
-        User user= userService.getUserByUsername(username);
+        User user = userService.getUserByUsername(username);
         UserRequest userRequest = new UserRequest(Math.toIntExact(user.getId()), true,
                 driverIdNumber, driverLicenseNumber, licenseExpDate);
         boolean result = userService.becomeDriver(Math.toIntExact(user.getId()), userRequest);
         if (!result) {
+            model.addAttribute("failed", Constants.EDITING_FAILED);
+            model.addAttribute("user", user);
             return "redirect:/users/{username}/driver-edit";
         }
+        log.info(user.toString());
+        log.info("User Updated");
+        model.addAttribute("succeed", Constants.EDITING_SUCCEED);
         model.addAttribute("driver", user);
         return "redirect:/users/{username}/driver-page";
     }
-
 }

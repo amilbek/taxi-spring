@@ -35,65 +35,75 @@ public class DriverOrderController {
         return "drivers/driver-orders";
     }
 
-    @PostMapping("/users/{username}/{id}/accept-order")
+    @PostMapping("/users/{username}/accept-order/{id}")
     public String acceptOrder(@PathVariable(value = "username") String username,
-                              @PathVariable(value = "id") Integer orderId, Model model) {
-        boolean result = orderService.acceptOrder(username, orderId);
-        Iterable<Order> orders = orderService.getAvailableOrders();
-        model.addAttribute("orders", orders);
+                              @PathVariable(value = "id") Integer id, Model model) {
+        boolean result = orderService.acceptOrder(username, id);
         if (!result) {
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
-            return "drivers/driver-orders";
+            model.addAttribute("failed", Constants.ACCEPTED_SUCCESSFULLY);
+            return "redirect:/users/{username}/avail-orders";
         }
-        model.addAttribute("succeed", Constants.ACCEPTED_SUCCESSFULLY);
-        return "drivers/driver-orders";
-    }
-
-    @PostMapping("/users/{username}/{id}/wait-client")
-    public String waitClient(@PathVariable(value = "username") String username,
-                              @PathVariable(value = "id") Integer orderId, Model model) {
         User user = userService.getUserByUsername(username);
-        boolean result = orderService.waitClient(orderId);
+        Order order = orderService.getOrder(id);
+        log.info(order.toString());
         Iterable<Order> orders = orderService.getAvailableOrders();
         model.addAttribute("user", user);
         model.addAttribute("orders", orders);
-        if (!result) {
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
-            return "drivers/driver-orders";
-        }
-        model.addAttribute("succeed", Constants.ACCEPTED_SUCCESSFULLY);
-        return "drivers/driver-orders";
+        model.addAttribute("succeed", Constants.START_ORDER);
+        return "redirect:/users/{username}/avail-orders";
     }
 
-    @PostMapping("/users/{username}/{id}/start-order")
+    @PostMapping("/users/{username}/wait-client/{id}")
+    public String waitClient(@PathVariable(value = "username") String username,
+                              @PathVariable(value = "id") Integer id, Model model) {
+        boolean result = orderService.waitClient(id);
+        if (!result) {
+            model.addAttribute("failed", Constants.SOMETHING_WRONG);
+            return "redirect:/users/{username}/avail-orders";
+        }
+        User user = userService.getUserByUsername(username);
+        Order order = orderService.getOrder(id);
+        log.info(order.toString());
+        Iterable<Order> orders = orderService.getAvailableOrders();
+        model.addAttribute("user", user);
+        model.addAttribute("orders", orders);
+        model.addAttribute("succeed", Constants.ACCEPTED_SUCCESSFULLY);
+        return "redirect:/users/{username}/avail-orders";
+    }
+
+    @PostMapping("/users/{username}/start-order/{id}")
     public String startOrder(@PathVariable(value = "username") String username,
                              @PathVariable(value = "id") Integer id, Model model) {
-        User user = userService.getUserByUsername(username);
         boolean result = orderService.startOrder(id);
+        if (!result) {
+            model.addAttribute("failed", Constants.SOMETHING_WRONG);
+            return "redirect:/users/{username}/avail-orders";
+        }
+        User user = userService.getUserByUsername(username);
+        Order order = orderService.getOrder(id);
+        log.info(order.toString());
         Iterable<Order> orders = orderService.getAvailableOrders();
         model.addAttribute("user", user);
         model.addAttribute("orders", orders);
-        if (!result) {
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
-            return "drivers/driver-orders";
-        }
         model.addAttribute("succeed", Constants.START_ORDER);
-        return "drivers/driver-orders";
+        return "redirect:/users/{username}/avail-orders";
     }
 
-    @PostMapping("/users/{username}/{id}/complete-order")
+    @PostMapping("/users/{username}/complete-order/{id}")
     public String completeOrder(@PathVariable(value = "username") String username,
                                 @PathVariable(value = "id") Integer id, Model model) {
-        User user = userService.getUserByUsername(username);
         boolean result = orderService.completeOrder(id);
+        if (!result) {
+            model.addAttribute("fail", Constants.SOMETHING_WRONG);
+            return "redirect:/users/{username}/avail-orders";
+        }
+        User user = userService.getUserByUsername(username);
+        Order order = orderService.getOrder(id);
+        log.info(order.toString());
         Iterable<Order> orders = orderService.getAvailableOrders();
         model.addAttribute("user", user);
         model.addAttribute("orders", orders);
-        if (!result) {
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
-            return "drivers/driver-orders";
-        }
         model.addAttribute("succeed", Constants.COMPLETED_SUCCESSFULLY);
-        return "drivers/driver-orders";
+        return "redirect:/users/{username}/avail-orders";
     }
 }

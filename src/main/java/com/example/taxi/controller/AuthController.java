@@ -53,10 +53,10 @@ public class AuthController {
         userRequest.setPassword(passwordEncoder.encode(password));
         boolean result = userService.saveUser(userRequest);
         if (!result) {
-            model.addAttribute("fail", Constants.REGISTRATION_FAILED);
+            model.addAttribute("failed", Constants.REGISTRATION_FAILED);
             return "auth/user-register";    
         }
-        model.addAttribute("success", Constants.REGISTRATION_SUCCEED);
+        model.addAttribute("succeed", Constants.REGISTRATION_SUCCEED);
         return "auth/user-login";
     }
 
@@ -82,7 +82,7 @@ public class AuthController {
             }
             return "redirect:/users/" + username;
         } catch (AuthenticationException e) {
-            model.addAttribute("fail", Constants.LOGIN_FAILED);
+            model.addAttribute("failed", Constants.LOGIN_FAILED);
             return "redirect:/auth/sign-in";
         }
     }

@@ -13,17 +13,19 @@
 </head>
 <body>
 <div class="container mt-5">
-    <div th:each="o : ${order}" class="alert alert -info mt-2">
-        <h3 th:text="${o.addressFrom}"></h3>
-        <p th:text="${o.addressTo}"></p>
-        <h3 th:text="${o.price}"></h3>
-        <h3 th:text="${o.distance}"></h3>
-        <h3 th:text="${o.driver}"></h3>
-        <h3 th:text="${o.user}"></h3>
-        <a th:href="'/orders/' + ${o.id} + '/edit'" class="btn btn-warning">Edit</a><br><br>
-        <form th:action="'/orders/' + ${o.id} + '/remove'" method="post">
-            <button class="btn btn-warning" type="submit">Delete</button>
-        </form>
+    <div th:each="u : ${user}" class="alert alert -info mt-2">
+        <div th:each="o : ${order}" class="alert alert -info mt-2">
+            <h3 th:text="${o.addressFrom}"></h3>
+            <p th:text="${o.addressTo}"></p>
+            <h3 th:text="${o.orderPrice}"></h3>
+            <h3 th:text="${o.orderDistance}"></h3>
+            <h3 th:text="${o.orderStatus}"></h3>
+            <h3 th:text="${o.driver}"></h3>
+            <h3 th:text="${o.user}"></h3>
+            <form th:action="'/users/' + ${u.username} + ${o.id} + '/cancel-order'" method="post">
+                <button class="btn btn-warning" type="submit">Cancel</button>
+            </form>
+        </div>
     </div>
 </div>
 </body>

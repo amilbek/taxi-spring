@@ -36,35 +36,50 @@ public class UserOrderController {
                            Model model) {
         User user = userService.getUserByUsername(username);
         OrderRequest orderRequest = new OrderRequest(addressFrom, addressTo, tariff);
-        orderRequest.setUser(user);
         boolean result = orderService.saveOrder(orderRequest, username);
         if (!result) {
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
+            model.addAttribute("failed", Constants.SOMETHING_WRONG);
             return "orders/add-order";
         }
+        Order order = orderService.getCurrentOrderByUser(user);
+        log.info(order.toString());
+        model.addAttribute("succeed", Constants.ORDERED_SUCCESSFULLY);
         model.addAttribute("user", user);
-        return "redirect:/users/user" + username;
+        model.addAttribute("order", order);
+        return "redirect:/users/{username}/order-page";
     }
-
 
     @GetMapping("/users/{username}/add-order")
     public String addOrder(@PathVariable(value = "username") String username, Model model) {
-        model.addAttribute("username", username);
+        User user = userService.getUserByUsername(username);
+        model.addAttribute("user", user);
         return "orders/add-order";
     }
 
-    @GetMapping("/users/{username}/cancel-order")
-    public String cancelOrder(@PathVariable(value = "username") String username, Model model) {
+    @GetMapping("/users/{username}/order-page")
+    public String getUserOrderPage(@PathVariable(value = "username") String username, Model model) {
         User user = userService.getUserByUsername(username);
+        Order order = orderService.getCurrentOrderByUser(user);
+        model.addAttribute("user", user);
+        model.addAttribute("order", order);
+        return "orders/user-order";
+    }
+
+    @PostMapping("/users/{username}/{id}/cancel-order")
+    public String cancelOrder(@PathVariable(value = "username") String username,
+                              @PathVariable(value = "id") Integer id, Model model) {
+        User user = userService.getUserByUsername(username);
+        Order order = orderService.getOrder(id);
         boolean result = orderService.cancelOrder(user.getId().intValue());
-        Iterable<Order> orders = orderService.getOrdersByUser(Math.toIntExact(user.getId()));
+        Iterable<Order> orders = orderService.getOrdersByUser(user);
         model.addAttribute("orders", orders);
         model.addAttribute("user", user);
         if (!result) {
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
-            return "users/user-page";
+            model.addAttribute("order", order);
+            model.addAttribute("failed", Constants.SOMETHING_WRONG);
+            return "redirect:/users/{username}/order-page";
         }
         model.addAttribute("success", Constants.CANCELED_SUCCESSFULLY);
-        return "users/user-page";
+        return "users/user-orders";
     }
 }

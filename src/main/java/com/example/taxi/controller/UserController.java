@@ -35,6 +35,7 @@ public class UserController {
         User user = userService.getUserByUsername(username);
         if (user == null) {
             log.info("Nothing about user");
+            model.addAttribute("failed", Constants.USER_NOT_FOUND);
             return "auth/user-login";
         }
         log.info(user.toString());
@@ -46,6 +47,8 @@ public class UserController {
     public String getEditPage(@PathVariable(value = "username") String username, Model model) {
         User user = userService.getUserByUsername(username);
         if (user == null) {
+            log.info("Nothing about user");
+            model.addAttribute("failed", Constants.USER_NOT_FOUND);
             return "auth/user-login";
         }
         model.addAttribute("user", user);
@@ -64,11 +67,13 @@ public class UserController {
                 phoneNumber, username);
         boolean result = userService.updateUser(userRequest);
         if (!result) {
+            model.addAttribute("failed", Constants.EDITING_FAILED);
             model.addAttribute("user", user);
             return "/users/user-page";
         }
         log.info(user.toString());
         log.info("User Updated");
+        model.addAttribute("succeed", Constants.EDITING_SUCCEED);
         model.addAttribute("user", user);
         return "redirect:/users/" + username;
     }
@@ -82,7 +87,7 @@ public class UserController {
         if (!result1 || !result2 || !result3) {
             log.info(user.toString());
             model.addAttribute("user", user);
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
+            model.addAttribute("failed", Constants.DELETING_FAILED);
             return "users/user-page";
         }
         log.info("User deleted");
@@ -92,7 +97,8 @@ public class UserController {
     @GetMapping("/users/{username}/history")
     public String getMyOrders(@PathVariable(value = "username") String username, Model model) {
         User user = userService.getUserByUsername(username);
-        Iterable<Order> orders = orderService.getOrdersByUser(Math.toIntExact(user.getId()));
+        Iterable<Order> orders = orderService.getOrdersByUser(user);
+        model.addAttribute("user", user);
         model.addAttribute("orders", orders);
         return "users/user-orders";
     }
