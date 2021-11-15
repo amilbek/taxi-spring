@@ -102,7 +102,7 @@ public class AdminController {
     @PostMapping("/delete-driver/{id}")
     public String deleteDriver(@PathVariable(value = "id") Integer id, Model model) {
         boolean result1 = carService.deleteCarByDriver(id);
-        boolean result2 = orderService.deleteOrderByDriver(id);
+        boolean result2 = orderService.deleteOrderByUser(id);
         boolean result3 = userService.deleteUser(id);
         if (!result1 || !result2 || !result3) {
             User user = userService.getUser(id);
