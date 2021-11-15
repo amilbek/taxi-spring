@@ -179,6 +179,6 @@ public class AdminController {
             return "redirect:/admin/all-users";
         }
         model.addAttribute("order", order);
-        return "user-order";
+        return "admin/order-details";
     }
 }
