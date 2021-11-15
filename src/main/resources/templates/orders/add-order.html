@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Order</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
+          crossorigin="anonymous" />
+</head>
+
+<body>
+<div class="container">
+    <form class="form-signin" method="post" action="'/users/' + ${username} + '/order'">
+        <h2 class="form-signin-heading">Order</h2>
+        <p>
+            <label for="addressfrom" class="sr-only">Address From</label>
+            <input type="text" id="addressfrom" name="addressFrom" class="form-control" placeholder="Address From" required autofocus>
+        </p>
+        <p>
+            <label for="addressto" class="sr-only">Address To</label>
+            <input type="text" id="addressto" name="addressTo" class="form-control" placeholder="Address To" required autofocus>
+        </p>
+        <p>
+            <label for="tariff" class="sr-only">Tariff</label>
+            <select name="tariff" id="tariff">
+                <option value="economy">Economy</option>
+                <option value="comfort">Comfort</option>
+                <option value="business">Business</option>
+                <option value="minivan">Minivan</option>
+                <option value="cargo">Cargo</option>
+            </select>
+        </p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+    </form>
+</div>
+</body>
+
+</html>

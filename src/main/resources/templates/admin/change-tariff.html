@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Users</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
+          crossorigin="anonymous" />
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Cars</h1>
+    <div th:each="c : ${car}" class="alert alert -info mt-2">
+        <h4 th:text="${c.carNumber}"></h4>
+        <p th:text="${c.carModel}"></p>
+        <p th:text="${c.carColor}"></p>
+
+        <form th:action="'/admin/car-tariff/' + ${c.id}" method="post">
+            <label for="tariff"></label>
+            <select name="carTariff" id="tariff">
+                <option value="Economy">Economy</option>
+                <option value="Comfort">Comfort</option>
+                <option value="Business">Business</option>
+                <option value="Minivan">Minivan</option>
+                <option value="Cargo">Cargo</option>
+            </select>
+            <button class="btn btn-warning" type="submit">Change</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

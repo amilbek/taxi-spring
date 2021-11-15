@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>User Edit</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
+          crossorigin="anonymous" />
+</head>
+
+<body>
+<div class="container mt-5">
+    <div th:each="u : ${user}" class="alert alert -info mt-2">
+        <form class="form-signin" method="post" action="/users/user/edit">
+            <h2 class="form-signin-heading">Edit</h2>
+            <p>
+                <label for="firstname" class="sr-only">First Name</label>
+                <input type="text" id="firstname" name="firstName" th:value="${u.firstName}" class="form-control" placeholder="First Name" required autofocus>
+            </p>
+            <p>
+                <label for="lastname" class="sr-only">Last Name</label>
+                <input type="text" id="lastname" name="lastName" th:value="${u.lastName}" class="form-control" placeholder="Last Name" required autofocus>
+            </p>
+            <p>
+                <label for="phonenumber" class="sr-only">Phone Number</label>
+                <input type="text" id="phonenumber" name="phoneNumber" th:value="${u.phoneNumber}" class="form-control" placeholder="Phone Number" required autofocus>
+            </p>
+            <p>
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" id="username" name="username" th:value="${u.username}" class="form-control" placeholder="Username" required autofocus>
+            </p>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Refresh</button>
+        </form>
+    </div>
+</div>
+</body>
+

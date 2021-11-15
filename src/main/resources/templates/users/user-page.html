@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Users</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
+          crossorigin="anonymous" />
+</head>
+<body>
+<div class="container mt-5">
+    <h2 th:text="${greeting}"></h2>
+    <div th:each="u : ${user}" class="alert alert -info mt-2">
+        <table>
+            <tr>
+                <th>Username</th>
+                <td><p th:text="${u.username}"></p></td>
+            </tr>
+            <tr>
+                <th>First Name</th>
+                <td><p th:text="${u.firstName}"></p></td>
+            </tr>
+            <tr>
+                <th>Last Name</th>
+                <td><p th:text="${u.lastName}"></p></td>
+            </tr>
+            <tr>
+                <th>Phone Number</th>
+                <td><p th:text="${u.phoneNumber}"></p></td>
+            </tr>
+        </table>
+        <a th:href="'/users/' + ${u.username} + '/edit-page'" class="btn btn-warning">Edit</a><br><br>
+        <form th:action="'/users/' + ${u.id} + '/delete'" method="post">
+            <button class="btn btn-warning" type="submit">Delete</button>
+        </form>
+        <br><br>
+        <a th:href="'/users/' + ${u.username} + '/add-order'" class="btn btn-warning">Order</a><br><br>
+        <a th:href="'/users/' + ${u.username} + '/history'" class="btn btn-warning">My Orders</a><br><br>
+        <a th:href="'/users/' + ${u.username} + '/driver'" class="btn btn-warning">Driver</a><br><br>
+    </div>
+</div>
+</body>
+</html>

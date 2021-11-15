@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Register</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
+          crossorigin="anonymous" />
+</head>
+
+<body>
+<div class="container">
+    <form class="form-signin" method="post" action="/auth/register">
+        <h2 class="form-signin-heading">Registration</h2>
+        <span th:text="${fail}"></span>
+        <p>
+            <label for="firstname" class="sr-only">First Name</label>
+            <input type="text" id="firstname" name="firstName" class="form-control" placeholder="First Name" required autofocus>
+        </p>
+        <p>
+            <label for="lastname" class="sr-only">Last Name</label>
+            <input type="text" id="lastname" name="lastName" class="form-control" placeholder="Last Name" required autofocus>
+        </p>
+        <p>
+            <label for="phonenumber" class="sr-only">Phone Number</label>
+            <input type="text" id="phonenumber" name="phoneNumber" class="form-control" placeholder="Phone Number" required autofocus>
+        </p>
+        <p>
+            <label for="username" class="sr-only">Username</label>
+            <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+        </p>
+        <p>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+        </p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+    </form>
+</div>
+</body>
+
+</html>

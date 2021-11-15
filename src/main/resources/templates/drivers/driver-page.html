@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Drivers</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
+          crossorigin="anonymous" />
+</head>
+<body>
+<div class="container mt-5">
+    <div th:each="d : ${driver}" class="alert alert -info mt-2">
+        <p th:text="${d.firstName}"></p>
+        <p th:text="${d.lastName}"></p>
+        <p th:text="${d.username}"></p>
+        <p th:text="${d.phoneNumber}"></p>
+        <p th:text="${d.driverIdNumber}"></p>
+        <p th:text="${d.driverLicenseNumber}"></p>
+        <p th:text="${d.licenseExpDate}"></p>
+        <a th:href="'/users/' + ${d.username} + '/driver-edit'" class="btn btn-warning">Edit</a><br><br>
+        <a th:href="'/users/' + ${d.username} + '/car'" class="btn btn-warning">Car</a><br><br>
+        <a th:href="'/users/' + ${d.username} + '/avail-orders'" class="btn btn-warning">Orders</a><br><br>
+        <a th:href="'/users/' + ${d.username}" class="btn btn-warning">User Page</a><br><br>
+    </div>
+</div>
+</body>
+</html>

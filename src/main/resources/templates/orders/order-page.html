@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Drivers</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
+          crossorigin="anonymous" />
+</head>
+<body>
+<div class="container mt-5">
+    <div th:each="o : ${order}" class="alert alert -info mt-2">
+        <h3 th:text="${o.addressFrom}"></h3>
+        <p th:text="${o.addressTo}"></p>
+        <h3 th:text="${o.price}"></h3>
+        <h3 th:text="${o.distance}"></h3>
+        <h3 th:text="${o.driver}"></h3>
+        <h3 th:text="${o.user}"></h3>
+        <a th:href="'/orders/' + ${o.id} + '/edit'" class="btn btn-warning">Edit</a><br><br>
+        <form th:action="'/orders/' + ${o.id} + '/remove'" method="post">
+            <button class="btn btn-warning" type="submit">Delete</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

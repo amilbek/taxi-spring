@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Driver Register</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
+          crossorigin="anonymous" />
+</head>
+
+<body>
+<div class="container">
+    <div th:each="u : ${user}" class="alert alert -info mt-2">
+    <form class="form-signin" method="post" th:action="'/users/' + ${u.username} + '/become-driver'">
+        <h2 class="form-signin-heading">Registration</h2>
+        <span th:text="${fail}"></span>
+        <p>
+            <label for="iin" class="sr-only">Individual Identification Number</label>
+            <input type="text" id="iin" name="driverIdNumber" class="form-control" placeholder="Individual Identification Number" required>
+        </p>
+        <p>
+            <label for="license" class="sr-only">Driving License Number</label>
+            <input type="text" id="license" name="driverLicenseNumber" class="form-control" placeholder="Driving License Number" required>
+        </p>
+        <p>
+            <label for="expdate" class="sr-only">Driving License Expiration Date</label>
+            <input type="date" id="expdate" name="licenseExpDate" class="form-control" placeholder="Driving License Expiration Date" required>
+        </p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+    </form>
+    </div>
+</div>
+</body>
+
+</html>

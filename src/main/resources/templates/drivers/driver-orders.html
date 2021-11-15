@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Orders</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
+          crossorigin="anonymous" />
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Orders</h1>
+    <div th:each="u : ${user}" class="alert alert -info mt-2">
+        <div th:each="order : ${orders}" class="alert alert -info mt-2">
+            <h4 th:text="${order.addressFrom}"></h4>
+            <p th:text="${order.addressTo}"></p>
+            <p th:text="${order.orderPrice}"></p>
+            <p th:text="${order.orderDistance}"></p>
+            <form th:action="'/users/' + ${u.username} + '/accept-order/' + ${order.id}" method="post">
+                <button class="btn btn-warning" type="submit">Accept Order</button>
+            </form>
+            <form th:action="'/users/' + ${u.username} + '/start-order/' + ${order.id}" method="post">
+                <button class="btn btn-warning" type="submit">Start Order</button>
+            </form>
+            <form th:action="'/users/' + ${u.username} + '/complete-order/' + ${order.id}" method="post">
+                <button class="btn btn-warning" type="submit">Complete Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

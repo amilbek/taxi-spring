@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Drivers</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
+          crossorigin="anonymous" />
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Drivers</h1>
+    <div th:each="driver : ${drivers}" class="alert alert -info mt-2">
+        <h4 th:text="${driver.firstName}"></h4><h4 th:text="${driver.lastName}"></h4>
+        <p th:text="${driver.username}"></p>
+        <a th:href="'/admin/all-drivers/' + ${driver.id}" class="btn btn-warning">Details</a><br><br>
+    </div>
+</div>
+</body>
+</html>
