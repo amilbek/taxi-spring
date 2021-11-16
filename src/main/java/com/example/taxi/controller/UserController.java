@@ -82,7 +82,7 @@ public class UserController {
     public String deleteUser(@PathVariable(value = "id") Integer id, Model model) {
         User user = userService.getUser(id);
         boolean result1 = carService.deleteCarByDriver(id);
-        boolean result2 = orderService.deleteOrderByUser(id);
+        boolean result2 = orderService.deleteOrdersByUser(id);
         boolean result3 = userService.deleteUser(id);
         if (!result1 || !result2 || !result3) {
             log.info(user.toString());

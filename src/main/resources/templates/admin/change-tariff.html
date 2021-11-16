@@ -15,7 +15,7 @@
 <div class="container mt-5">
     <h1>Cars</h1>
     <div th:each="c : ${car}" class="alert alert -info mt-2">
-        <h4 th:text="${c.carNumber}"></h4>
+        <p th:text="${c.carNumber}"></p>
         <p th:text="${c.carModel}"></p>
         <p th:text="${c.carColor}"></p>
 

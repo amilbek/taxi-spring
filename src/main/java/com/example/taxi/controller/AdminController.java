@@ -52,26 +52,26 @@ public class AdminController {
         if (!result) {
             model.addAttribute("failed", Constants.SOMETHING_WRONG);
             model.addAttribute("driver", user);
-            return "admin/driver-details";
+            return "redirect:/admin/driver-details/{id}";
         }
         model.addAttribute("driver", user);
-        return "admin/driver-details";
+        return "redirect:/admin/driver-details";
     }
 
     @PostMapping("/admin/car-tariff/{id}")
-        public String changeTariff(@PathVariable(value = "id") Integer carId,
-                                          @RequestParam String carTariff, Model model) {
+    public String changeTariff(@PathVariable(value = "id") Integer carId,
+                               @RequestParam String carTariff, Model model) {
         CarTariffRequest carTariffRequest = new CarTariffRequest(carId, carTariff);
         boolean result = carService.changeTariff(carTariffRequest);
         if (!result) {
             Car car = carService.getCarById(carId);
             model.addAttribute("failed", Constants.SOMETHING_WRONG);
             model.addAttribute("car", car);
-            return "redirect:/admin/all-cars";
+            return "redirect:/admin/all-cars/{id}";
         }
         Car car = carService.getCarById(carId);
         model.addAttribute("car", car);
-        return "redirect:/admin/all-cars";
+        return "redirect:/admin/all-cars/{id}";
     }
 
     @GetMapping("/admin/all-cars/{id}/change-tariff")
@@ -86,12 +86,12 @@ public class AdminController {
 
     @PostMapping("/admin/delete-user/{id}")
     public String deleteUser(@PathVariable(value = "id") Integer id, Model model) {
-        boolean result1 = orderService.deleteOrderByUser(id);
-        boolean result2 = userService.deleteUser(id);
-        if (!result1 || !result2) {
-            User user = userService.getUser(id);
-            model.addAttribute("user", user);
-            return "/main/resources/templates/users/user-page.html";
+        boolean result1 = orderService.deleteOrdersByUser(id);
+        boolean result2 = carService.deleteCarByDriver(id);
+        boolean result3 = userService.deleteUser(id);
+        if (!result1 || !result2 || !result3) {
+            model.addAttribute("failed", Constants.SOMETHING_WRONG);
+            return "redirect:/admin/all-users/{id}";
         }
         Iterable<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
@@ -101,16 +101,15 @@ public class AdminController {
     @PostMapping("/admin/delete-driver/{id}")
     public String deleteDriver(@PathVariable(value = "id") Integer id, Model model) {
         boolean result1 = carService.deleteCarByDriver(id);
-        boolean result2 = orderService.deleteOrderByUser(id);
-        boolean result3 = userService.deleteUser(id);
-        if (!result1 || !result2 || !result3) {
-            User user = userService.getUser(id);
-            model.addAttribute("driver", user);
-            return "admin/driver-details";
+        DriverStatusRequest driverStatusRequest = new DriverStatusRequest(id, false);
+        boolean result2 = userService.changeStatus(driverStatusRequest);
+        if (!result1 || !result2) {
+            model.addAttribute("failed", Constants.SOMETHING_WRONG);
+            return "redirect:/admin/all-drivers/{id}";
         }
         Iterable<User> drivers = userService.getAllDrivers();
         model.addAttribute("drivers", drivers);
-        return "redirect:/admin/all-drivers";
+        return "admin/all-drivers";
     }
 
     @GetMapping("/admin/all-users")
@@ -145,7 +144,9 @@ public class AdminController {
     public String getUser(@PathVariable(value ="id") Integer id, Model model) {
         User user = userService.getUser(id);
         if (user == null) {
-            return "redirect:/admin/all-users";
+            Iterable<User> users = userService.getAllUsers();
+            model.addAttribute("users", users);
+            return "admin/all-users";
         }
         model.addAttribute("user", user);
         return "admin/user-details";
@@ -156,7 +157,9 @@ public class AdminController {
         User user = userService.getUser(id);
         Car car = carService.getCarByUser(id);
         if (user == null) {
-            return "redirect:/admin/all-drivers";
+            Iterable<User> users = userService.getAllDrivers();
+            model.addAttribute("drivers", users);
+            return "admin/all-drivers";
         }
         model.addAttribute("user", user);
         model.addAttribute("car", car);
@@ -167,7 +170,9 @@ public class AdminController {
     public String getCar(@PathVariable(value ="id") Integer id, Model model) {
         Car car = carService.getCarById(id);
         if (car == null) {
-            return "redirect:/admin/all-car";
+            Iterable<Car> cars = carService.getAllCars();
+            model.addAttribute("cars", cars);
+            return "admin/all-cars";
         }
         model.addAttribute("car", car);
         return "admin/car-details";
@@ -177,7 +182,9 @@ public class AdminController {
     public String getOrder(@PathVariable(value ="id") Integer id, Model model) {
         Order order = orderService.getOrder(id);
         if (order == null) {
-            return "redirect:/admin/all-users";
+            Iterable<Order> orders = orderService.getAllOrders();
+            model.addAttribute("orders", orders);
+            return "admin/all-orders";
         }
         model.addAttribute("order", order);
         return "admin/order-details";

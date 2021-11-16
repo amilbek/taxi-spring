@@ -6,6 +6,7 @@ import com.example.taxi.models.CarRequest;
 import com.example.taxi.repository.CarRepository;
 import com.example.taxi.models.CarTariffRequest;
 import com.example.taxi.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class CarService {
     private final CarRepository carRepository;
@@ -69,17 +71,6 @@ public class CarService {
         carRepository.delete(car);
     }
 
-    public boolean addCarToDriver(String username, String carNumber) {
-        Car car = carRepository.findByCarNumber(carNumber);
-        if (car == null) {
-            return false;
-        }
-        User user = userRepository.findByUsername(username);
-        car.setUser(user);
-        carRepository.save(car);
-        return true;
-    }
-
     public boolean changeTariff(CarTariffRequest carTariffRequest) {
         Optional<Car> carOptional = carRepository.findById(carTariffRequest.getId().longValue());
         Car car = carOptional.orElse(null);
@@ -106,10 +97,13 @@ public class CarService {
     public boolean deleteCarByDriver(Integer id) {
         Optional<User> userOptional = userRepository.findById(id.longValue());
         User user = userOptional.orElse(null);
+        Car car = carRepository.findByUser(user);
         if (user == null) {
             return false;
         }
-        carRepository.deleteCarByUser(user);
+        log.info(user.toString());
+        log.info(car.toString());
+        carRepository.deleteById(car.getId());
         return true;
     }
 }

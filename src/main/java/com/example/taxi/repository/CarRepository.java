@@ -7,5 +7,4 @@ import org.springframework.data.repository.CrudRepository;
 public interface CarRepository extends CrudRepository<Car, Long> {
     Car findByCarNumber(String carNumber);
     Car findByUser(User user);
-    void deleteCarByUser(User user);
 }

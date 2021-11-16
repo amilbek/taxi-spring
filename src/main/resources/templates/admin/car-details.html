@@ -14,9 +14,9 @@
 <body>
 <div class="container mt-5">
     <div th:each="c : ${car}" class="alert alert -info mt-2">
-        <h3 th:text="${c.carNumber}"></h3>
+        <p th:text="${c.carNumber}"></p>
         <p th:text="${c.carModel}"></p>
-        <h3 th:text="${c.carColor}"></h3>
+        <p th:text="${c.carColor}"></p>
         <form th:action="'/admin/car-tariff/' + ${c.id}" method="post">
             <button class="btn btn-warning" type="submit">Change</button>
         </form>

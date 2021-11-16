@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/auth")
 @Log
 public class AuthController {
 
@@ -42,7 +41,7 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     public String register(@RequestParam String firstName,
                            @RequestParam String lastName,
                            @RequestParam String phoneNumber,
@@ -60,7 +59,7 @@ public class AuthController {
         return "auth/user-login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public String authenticate(@RequestParam String username, @RequestParam String password,
                                Model model) {
         try {
@@ -83,7 +82,7 @@ public class AuthController {
             return "redirect:/users/" + username;
         } catch (AuthenticationException e) {
             model.addAttribute("failed", Constants.LOGIN_FAILED);
-            return "redirect:/auth/sign-in";
+            return "auth/user-login";
         }
     }
 
@@ -92,7 +91,7 @@ public class AuthController {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
         model.addAttribute("logout", Constants.LOGOUT_SUCCEED);
-        return "/auth/user-login";
+        return "auth/user-login";
     }
 
 

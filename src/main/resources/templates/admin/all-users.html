@@ -15,10 +15,9 @@
 <div class="container mt-5">
     <h1>Users</h1>
     <div th:each="user : ${users}" class="alert alert -info mt-2">
-        <h4 th:text="${user.firstName}"></h4>
-        <p th:text="${user.lastName}"></p>
+        <p th:text="${user.firstName} + ' ' + ${user.lastName}"></p>
         <p th:text="${user.username}"></p>
-        <a th:href="'/users/' + ${user.id}" class="btn btn-warning">Details</a>
+        <a th:href="'/admin/all-users/' + ${user.id}" class="btn btn-warning">Details</a>
     </div>
 </div>
 </body>

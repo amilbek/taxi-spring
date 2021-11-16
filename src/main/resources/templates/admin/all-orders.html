@@ -17,9 +17,9 @@
     <div th:each="o : ${orders}" class="alert alert -info mt-2">
         <p th:text="${o.addressFrom}"></p>
         <p th:text="${o.addressTo}"></p>
-        <p th:text="${o.price}"></p>
-        <p th:text="${o.distance}"></p>
-        <a th:href="'/orders/' + ${order.id}" class="btn btn-warning">Details</a>
+        <p th:text="${o.orderPrice}"></p>
+        <p th:text="${o.orderDistance}"></p>
+        <a th:href="'/admin/all-orders/' + ${o.id}" class="btn btn-warning">Details</a>
     </div>
 </div>
 </body>

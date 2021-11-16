@@ -14,12 +14,12 @@
 <body>
 <div class="container mt-5">
     <div th:each="d : ${user}" class="alert alert -info mt-2">
-        <h3 th:text="${d.firstName}"></h3>
-        <p th:text="${d.lastName}"></p>
-        <h3 th:text="${d.username}"></h3>
-        <h3 th:text="${d.driverIdNumber}"></h3>
-        <h3 th:text="${d.driverLicenseNumber}"></h3>
-        <h3 th:text="${d.licenseExpDate}"></h3>
+        <p th:text="${d.firstName} + ' ' + ${d.lastName}"></p>
+        <p th:text="${d.username}"></p>
+        <p th:text="${d.phoneNumber}"></p>
+        <p th:text="${d.driverIdNumber}"></p>
+        <p th:text="${d.driverLicenseNumber}"></p>
+        <p th:text="${d.licenseExpDate}"></p>
         <form th:action="'/admin/driver-status/' + ${d.id}" method="post">
             <button class="btn btn-warning" type="submit">Active</button>
         </form>
@@ -27,9 +27,9 @@
             <button class="btn btn-warning" type="submit">Delete</button>
         </form>
         <div th:each="c : ${car}" class="alert alert -info mt-2">
-            <h3 th:text="${c.carNumber}"></h3>
+            <p th:text="${c.carNumber}"></p>
             <p th:text="${c.carModel}"></p>
-            <h3 th:text="${c.carColor}"></h3>
+            <p th:text="${c.carColor}"></p>
             <form th:action="'/admin/car-tariff/' + ${c.id}" method="post">
                 <button class="btn btn-warning" type="submit">Change</button>
             </form>

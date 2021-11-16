@@ -7,6 +7,7 @@ import com.example.taxi.models.OrderRequest;
 import com.example.taxi.repository.CarRepository;
 import com.example.taxi.repository.OrderRepository;
 import com.example.taxi.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 import static java.lang.Math.sqrt;
 
+@Slf4j
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
@@ -198,13 +200,19 @@ public class OrderService {
         return orders;
     }
 
-    public boolean deleteOrderByUser(Integer id) {
+    public boolean deleteOrdersByUser(Integer id) {
         Optional<User> userOptional = userRepository.findById(id.longValue());
         User user = userOptional.orElse(null);
+        List<Order> orders = new ArrayList<>();
+        orders.add(orderRepository.findAllByUser(user));
         if (user == null) {
             return false;
         }
-        orderRepository.deleteOrderByUser(user);
+        log.info(user.toString());
+        log.info(String.valueOf(orders));
+        for (Order order : orders) {
+            orderRepository.deleteById(order.getId());
+        }
         return true;
     }
 }
