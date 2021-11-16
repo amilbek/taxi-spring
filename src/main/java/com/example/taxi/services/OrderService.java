@@ -170,6 +170,16 @@ public class OrderService {
         return orders;
     }
 
+    public List<Order> getOrdersByDriver(User driver) {
+        List<Order> orders = new ArrayList<>();
+        orderRepository.findAll().forEach(order -> {
+            if (order.getOrderStatus().equals("completed") && driver.getIsDriver()) {
+                orders.add(order);
+            }
+        });
+        return orders;
+    }
+
     public List<Order> getAvailableOrders() {
         List<Order> orders = new ArrayList<>();
         orderRepository.findAll().forEach(order -> {

@@ -1,8 +1,10 @@
 package com.example.taxi.controller;
 
 import com.example.taxi.constants.Constants;
+import com.example.taxi.entity.Order;
 import com.example.taxi.entity.User;
 import com.example.taxi.models.UserRequest;
+import com.example.taxi.services.OrderService;
 import com.example.taxi.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,12 @@ import java.sql.Date;
 public class DriverController {
 
     private final UserService userService;
+    private final OrderService orderService;
 
     @Autowired
-    public DriverController(UserService userService) {
+    public DriverController(UserService userService, OrderService orderService) {
         this.userService = userService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/users/{username}/driver")
@@ -106,5 +110,13 @@ public class DriverController {
         model.addAttribute("succeed", Constants.EDITING_SUCCEED);
         model.addAttribute("driver", user);
         return "redirect:/users/{username}/driver-page";
+    }
+
+    @GetMapping("/users/{username}/driver-history")
+    public String getDriverHistoryPage(@PathVariable(value = "username") String username, Model model) {
+        User driver = userService.getUserByUsername(username);
+        Iterable<Order> orders = orderService.getOrdersByDriver(driver);
+        model.addAttribute("orders", orders);
+        return "drivers/driver-history";
     }
 }

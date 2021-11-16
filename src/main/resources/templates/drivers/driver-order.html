@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Orders</title>
+    <title>Drivers</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
@@ -13,25 +13,24 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1>Available Orders</h1>
-    <span th:text="${success}"></span>
-    <span th:text="${failed}"></span>
+    <div th:text="${succeed}"></div>
+    <div th:text="${failed}"></div>
     <div th:each="u : ${user}" class="alert alert -info mt-2">
-        <div th:each="order : ${orders}" class="alert alert -info mt-2">
-            <h4 th:text="${order.addressFrom}"></h4>
-            <p th:text="${order.addressTo}"></p>
-            <p th:text="${order.orderPrice}"></p>
-            <p th:text="${order.orderDistance}"></p>
-            <form th:action="'/users/' + ${u.username} + '/accept-order/' + ${order.id}" method="post">
-                <button class="btn btn-warning" type="submit">Accept Order</button>
+        <div th:each="o : ${order}" class="alert alert -info mt-2">
+            <h3 th:text="${o.addressFrom}"></h3>
+            <p th:text="${o.addressTo}"></p>
+            <h3 th:text="${o.orderPrice}"></h3>
+            <h3 th:text="${o.orderDistance}"></h3>
+            <h3 th:text="${o.orderStatus}"></h3>
+            <h3 th:text="${o.driver}"></h3>
+            <h3 th:text="${o.user}"></h3>
+            <form th:action="'/users/' + ${u.username} + '/wait-client/' + ${o.id}" method="post">
+                <button class="btn btn-warning" type="submit">Waited</button>
             </form>
-            <form th:action="'/users/' + ${u.username} + '/wait-client/' + ${order.id}" method="post">
-                <button class="btn btn-warning" type="submit">Wait Client</button>
-            </form>
-            <form th:action="'/users/' + ${u.username} + '/start-order/' + ${order.id}" method="post">
+            <form th:action="'/users/' + ${u.username} + '/start-order/' + ${o.id}" method="post">
                 <button class="btn btn-warning" type="submit">Start Order</button>
             </form>
-            <form th:action="'/users/' + ${u.username} + '/complete-order/' + ${order.id}" method="post">
+            <form th:action="'/users/' + ${u.username} + '/complete-order/' + ${o.id}" method="post">
                 <button class="btn btn-warning" type="submit">Complete Order</button>
             </form>
         </div>

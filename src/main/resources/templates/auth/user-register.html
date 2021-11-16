@@ -17,7 +17,8 @@
 <div class="container">
     <form class="form-signin" method="post" action="/auth/register">
         <h2 class="form-signin-heading">Registration</h2>
-        <span th:text="${fail}"></span>
+        <span th:text="${failed}"></span>
+        <span th:text="${succeed}"></span>
         <p>
             <label for="firstname" class="sr-only">First Name</label>
             <input type="text" id="firstname" name="firstName" class="form-control" placeholder="First Name" required autofocus>
