@@ -80,6 +80,6 @@ public class UserOrderController {
             return "redirect:/users/{username}/order-page";
         }
         model.addAttribute("success", Constants.CANCELED_SUCCESSFULLY);
-        return "users/user-orders";
+        return "user-history";
     }
 }

@@ -25,15 +25,6 @@
             <form th:action="'/users/' + ${u.username} + '/accept-order/' + ${order.id}" method="post">
                 <button class="btn btn-warning" type="submit">Accept Order</button>
             </form>
-            <form th:action="'/users/' + ${u.username} + '/wait-client/' + ${order.id}" method="post">
-                <button class="btn btn-warning" type="submit">Wait Client</button>
-            </form>
-            <form th:action="'/users/' + ${u.username} + '/start-order/' + ${order.id}" method="post">
-                <button class="btn btn-warning" type="submit">Start Order</button>
-            </form>
-            <form th:action="'/users/' + ${u.username} + '/complete-order/' + ${order.id}" method="post">
-                <button class="btn btn-warning" type="submit">Complete Order</button>
-            </form>
         </div>
     </div>
 </div>

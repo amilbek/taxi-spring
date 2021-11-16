@@ -100,6 +100,6 @@ public class UserController {
         Iterable<Order> orders = orderService.getOrdersByUser(user);
         model.addAttribute("user", user);
         model.addAttribute("orders", orders);
-        return "users/user-orders";
+        return "users/user-history";
     }
 }

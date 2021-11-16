@@ -1,8 +1,10 @@
 package com.example.taxi.services;
 
+import com.example.taxi.entity.Car;
 import com.example.taxi.entity.Order;
 import com.example.taxi.entity.User;
 import com.example.taxi.models.OrderRequest;
+import com.example.taxi.repository.CarRepository;
 import com.example.taxi.repository.OrderRepository;
 import com.example.taxi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,14 @@ import static java.lang.Math.sqrt;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final CarRepository carRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository) {
+    public OrderService(OrderRepository orderRepository, UserRepository userRepository,
+                        CarRepository carRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.carRepository = carRepository;
     }
 
     public boolean saveOrder(OrderRequest orderRequest, String username) {
@@ -44,9 +49,11 @@ public class OrderService {
         Optional<Order> orderOptional = orderRepository.findById(id.longValue());
         Order order = orderOptional.orElse(null);
         User driver = userRepository.findByUsername(username);
+        Car car = carRepository.findByUser(driver);
         assert driver != null;
         assert order != null;
-        if (!order.getOrderStatus().equals("ordered") || Boolean.TRUE.equals(!driver.getIsAvailable())) {
+        if (!order.getOrderStatus().equals("ordered") || Boolean.TRUE.equals(!driver.getIsAvailable())
+        || !order.getTariff().equals(car.getTariff())) {
             return false;
         }
         order.setDriver(driver);
@@ -158,10 +165,10 @@ public class OrderService {
 
     public Order getCurrentOrderByUser(User user) {
         Order order = orderRepository.findByUser(user);
-        if (order == null || !order.getOrderStatus().equals("ordered")) {
-            return null;
+        if (order.getOrderStatus().equals("ordered")) {
+            return order;
         }
-        return order;
+        return null;
     }
 
     public List<Order> getOrdersByUser(User user) {
@@ -173,17 +180,18 @@ public class OrderService {
     public List<Order> getOrdersByDriver(User driver) {
         List<Order> orders = new ArrayList<>();
         orderRepository.findAll().forEach(order -> {
-            if (order.getOrderStatus().equals("completed") && driver.getIsDriver()) {
+            if (order.getOrderStatus().equals("completed") && Boolean.TRUE.equals(driver.getIsDriver())) {
                 orders.add(order);
             }
         });
         return orders;
     }
 
-    public List<Order> getAvailableOrders() {
+    public List<Order> getAvailableOrders(User user) {
         List<Order> orders = new ArrayList<>();
+        Car car = carRepository.findByUser(user);
         orderRepository.findAll().forEach(order -> {
-            if (order.getOrderStatus().equals("ordered")) {
+            if (order.getOrderStatus().equals("ordered") && order.getTariff().equals(car.getTariff())) {
                 orders.add(order);
             }
         });
