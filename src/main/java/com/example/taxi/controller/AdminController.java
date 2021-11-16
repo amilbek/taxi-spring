@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Log
 @Controller
-@RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
     private final CarService carService;
@@ -32,7 +31,7 @@ public class AdminController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/admin/{username}")
     public String getAdminPage(@PathVariable(value = "username") String username, Model model) {
         User admin = userService.getUserByUsername(username);
         if (admin == null) {
@@ -44,7 +43,7 @@ public class AdminController {
         return "admin/admin";
     }
 
-    @PostMapping("/driver-status/{id}")
+    @PostMapping("/admin/driver-status/{id}")
     public String changeDriverStatus(@PathVariable(value = "id") Integer driverId,
                                      Model model) {
         DriverStatusRequest driverStatusRequest = new DriverStatusRequest(driverId, true);
@@ -59,7 +58,7 @@ public class AdminController {
         return "admin/driver-details";
     }
 
-    @PostMapping("/car-tariff/{id}")
+    @PostMapping("/admin/car-tariff/{id}")
         public String changeTariff(@PathVariable(value = "id") Integer carId,
                                           @RequestParam String carTariff, Model model) {
         CarTariffRequest carTariffRequest = new CarTariffRequest(carId, carTariff);
@@ -75,7 +74,7 @@ public class AdminController {
         return "redirect:/admin/all-cars";
     }
 
-    @GetMapping("/all-cars/{id}/change-tariff")
+    @GetMapping("/admin/all-cars/{id}/change-tariff")
     public String changeCarTariff(@PathVariable(value = "id") Integer id, Model model) {
         Car car = carService.getCarById(id);
         if (car == null) {
@@ -85,7 +84,7 @@ public class AdminController {
         return "admin/change-tariff";
     }
 
-    @PostMapping("/delete-user/{id}")
+    @PostMapping("/admin/delete-user/{id}")
     public String deleteUser(@PathVariable(value = "id") Integer id, Model model) {
         boolean result1 = orderService.deleteOrderByUser(id);
         boolean result2 = userService.deleteUser(id);
@@ -99,7 +98,7 @@ public class AdminController {
         return "admin/all-users";
     }
 
-    @PostMapping("/delete-driver/{id}")
+    @PostMapping("/admin/delete-driver/{id}")
     public String deleteDriver(@PathVariable(value = "id") Integer id, Model model) {
         boolean result1 = carService.deleteCarByDriver(id);
         boolean result2 = orderService.deleteOrderByUser(id);
@@ -114,35 +113,35 @@ public class AdminController {
         return "redirect:/admin/all-drivers";
     }
 
-    @GetMapping("/all-users")
+    @GetMapping("/admin/all-users")
     public String getAllUsers(Model model) {
         Iterable<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "admin/all-users";
     }
 
-    @GetMapping("/all-drivers")
+    @GetMapping("/admin/all-drivers")
     public String getAllDrivers(Model model) {
         Iterable<User> users = userService.getAllDrivers();
         model.addAttribute("drivers", users);
         return "admin/all-drivers";
     }
 
-    @GetMapping("/all-cars")
+    @GetMapping("/admin/all-cars")
     public String getAllCars(Model model) {
         Iterable<Car> cars = carService.getAllCars();
         model.addAttribute("cars", cars);
         return "admin/all-cars";
     }
 
-    @GetMapping("/all-orders")
+    @GetMapping("/admin/all-orders")
     public String getAllOrders(Model model) {
         Iterable<Order> orders = orderService.getAllOrders();
         model.addAttribute("orders", orders);
         return "admin/all-orders";
     }
 
-    @GetMapping("/all-users/{id}")
+    @GetMapping("/admin/all-users/{id}")
     public String getUser(@PathVariable(value ="id") Integer id, Model model) {
         User user = userService.getUser(id);
         if (user == null) {
@@ -152,17 +151,19 @@ public class AdminController {
         return "admin/user-details";
     }
 
-    @GetMapping("/all-drivers/{id}")
+    @GetMapping("/admin/all-drivers/{id}")
     public String getDriver(@PathVariable(value ="id") Integer id, Model model) {
         User user = userService.getUser(id);
+        Car car = carService.getCarByUser(id);
         if (user == null) {
             return "redirect:/admin/all-drivers";
         }
         model.addAttribute("user", user);
-        return "admin/user-details";
+        model.addAttribute("car", car);
+        return "admin/driver-details";
     }
 
-    @GetMapping("/all-cars/{id}")
+    @GetMapping("/admin/all-cars/{id}")
     public String getCar(@PathVariable(value ="id") Integer id, Model model) {
         Car car = carService.getCarById(id);
         if (car == null) {
@@ -172,7 +173,7 @@ public class AdminController {
         return "admin/car-details";
     }
 
-    @GetMapping("/all-orders/{id}")
+    @GetMapping("/admin/all-orders/{id}")
     public String getOrder(@PathVariable(value ="id") Integer id, Model model) {
         Order order = orderService.getOrder(id);
         if (order == null) {

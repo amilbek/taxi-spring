@@ -22,7 +22,7 @@
             <h3 th:text="${o.orderStatus}"></h3>
             <h3 th:text="${o.driver}"></h3>
             <h3 th:text="${o.user}"></h3>
-            <form th:action="'/users/' + ${u.username} + ${o.id} + '/cancel-order'" method="post">
+            <form th:action="'/users/' + ${u.username} + '/cancel-order' + ${o.id}" method="post">
                 <button class="btn btn-warning" type="submit">Cancel</button>
             </form>
         </div>

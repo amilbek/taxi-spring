@@ -65,7 +65,7 @@ public class UserOrderController {
         return "orders/user-order";
     }
 
-    @PostMapping("/users/{username}/{id}/cancel-order")
+    @PostMapping("/users/{username}/cancel-order/{id}")
     public String cancelOrder(@PathVariable(value = "username") String username,
                               @PathVariable(value = "id") Integer id, Model model) {
         User user = userService.getUserByUsername(username);

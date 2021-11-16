@@ -15,7 +15,7 @@
 <div class="container mt-5">
     <h1>Drivers</h1>
     <div th:each="driver : ${drivers}" class="alert alert -info mt-2">
-        <h4 th:text="${driver.firstName}"></h4><h4 th:text="${driver.lastName}"></h4>
+        <h4 th:text="${driver.firstName + ' ' + driver.lastName}"></h4>
         <p th:text="${driver.username}"></p>
         <a th:href="'/admin/all-drivers/' + ${driver.id}" class="btn btn-warning">Details</a><br><br>
     </div>
