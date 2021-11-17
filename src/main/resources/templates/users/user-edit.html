@@ -16,7 +16,7 @@
 <body>
 <div class="container mt-5">
     <div th:each="u : ${user}" class="alert alert -info mt-2">
-        <form class="form-signin" method="post" action="/users/user/edit">
+        <form class="form-signin" method="post" th:action="'/users/' + ${u.username} + '/edit'">
             <h2 class="form-signin-heading">Edit</h2>
             <p>
                 <label for="firstname" class="sr-only">First Name</label>

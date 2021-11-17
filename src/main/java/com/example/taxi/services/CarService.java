@@ -53,6 +53,7 @@ public class CarService {
         assert car != null;
         car.setCarNumber(carRequest.getCarNumber());
         car.setCarModel(carRequest.getCarModel());
+        car.setCarColor(carRequest.getCarColor());
         carRepository.save(car);
         return true;
     }
@@ -102,8 +103,10 @@ public class CarService {
             return false;
         }
         log.info(user.toString());
-        log.info(car.toString());
-        carRepository.deleteById(car.getId());
+        if (car != null) {
+            log.info(car.toString());
+            carRepository.delete(car);
+        }
         return true;
     }
 }

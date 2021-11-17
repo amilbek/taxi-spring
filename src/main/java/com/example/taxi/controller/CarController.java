@@ -100,13 +100,13 @@ public class CarController {
         boolean result = carService.updateCar(carRequest);
         if (!result) {
             model.addAttribute("failed", Constants.SOMETHING_WRONG);
-            return "cars/edit-car";
+            return "redirect:/users/{username}/{id}/edit-car";
         }
         Car car = carService.getCarById(id);
         User user = userService.getUserByUsername(username);
         model.addAttribute("user", user);
         model.addAttribute("car", car);
-        return "cars/car-page";
+        return "redirect:/users/{username}/car-page";
     }
 
     @PostMapping("/users/{username}/{id}/delete")

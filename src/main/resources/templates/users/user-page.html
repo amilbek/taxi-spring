@@ -41,6 +41,9 @@
         <a th:href="'/users/' + ${u.username} + '/add-order'" class="btn btn-warning">Order</a><br><br>
         <a th:href="'/users/' + ${u.username} + '/history'" class="btn btn-warning">My Orders</a><br><br>
         <a th:href="'/users/' + ${u.username} + '/driver'" class="btn btn-warning">Driver</a><br><br>
+<!--        <form  method="get">-->
+            <a href="/auth/logout" class="btn btn-warning" type="submit">Log Out</a><br><br>
+<!--        </form>-->
     </div>
 </div>
 </body>

@@ -86,21 +86,19 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response, Model model) {
-        SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
-        securityContextLogoutHandler.logout(request, response, null);
+    @GetMapping("/auth/logout")
+    public String logout(Model model) {
         model.addAttribute("logout", Constants.LOGOUT_SUCCEED);
-        return "auth/user-login";
+        return "redirect:/auth/sign-in";
     }
 
 
-    @GetMapping("/sign-in")
+    @GetMapping("/auth/sign-in")
     public String login() {
         return "auth/user-login";
     }
 
-    @GetMapping("/signup")
+    @GetMapping("/auth/signup")
     public String register() {
         return "auth/user-register";
     }

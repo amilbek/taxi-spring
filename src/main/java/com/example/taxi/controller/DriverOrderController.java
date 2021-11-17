@@ -30,6 +30,10 @@ public class DriverOrderController {
     public String getOrders(@PathVariable(value = "username") String username, Model model) {
         User user = userService.getUserByUsername(username);
         Iterable<Order> orders = orderService.getAvailableOrders(user);
+        if (orders == null) {
+            model.addAttribute("user", user);
+            return "drivers/404page";
+        }
         model.addAttribute("user", user);
         model.addAttribute("orders", orders);
         return "drivers/driver-orders";
@@ -109,12 +113,12 @@ public class DriverOrderController {
             Iterable<Order> orders = orderService.getAvailableOrders(user);
             model.addAttribute("orders", orders);
             model.addAttribute("fail", Constants.SOMETHING_WRONG);
-            return "redirect:/users/{username}/avail-orders";
+            return "redirect:/users/{username}/driver-order/{id}";
         }
         Order order = orderService.getOrder(id);
         log.info(order.toString());
         model.addAttribute("user", user);
         model.addAttribute("order", order);
-        return "redirect:/users/{username}/driver-order/{id}";
+        return "redirect:/users/{username}/avail-orders";
     }
 }

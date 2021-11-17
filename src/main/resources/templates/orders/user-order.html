@@ -15,14 +15,12 @@
 <div class="container mt-5">
     <div th:each="u : ${user}" class="alert alert -info mt-2">
         <div th:each="o : ${order}" class="alert alert -info mt-2">
-            <h3 th:text="${o.addressFrom}"></h3>
+            <p th:text="${o.addressFrom}"></p>
             <p th:text="${o.addressTo}"></p>
-            <h3 th:text="${o.orderPrice}"></h3>
-            <h3 th:text="${o.orderDistance}"></h3>
-            <h3 th:text="${o.orderStatus}"></h3>
-            <h3 th:text="${o.driver}"></h3>
-            <h3 th:text="${o.user}"></h3>
-            <form th:action="'/users/' + ${u.username} + '/cancel-order' + ${o.id}" method="post">
+            <p th:text="${o.orderPrice}"></p>
+            <p th:text="${o.orderDistance}"></p>
+            <p th:text="${o.orderStatus}"></p>
+            <form th:action="'/users/' + ${u.username} + '/cancel-order/' + ${o.id}" method="post">
                 <button class="btn btn-warning" type="submit">Cancel</button>
             </form>
         </div>

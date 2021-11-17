@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Orders</title>
+    <title>Drivers</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
@@ -13,16 +13,15 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1>Driver History</h1>
-    <span th:text="${success}"></span>
-    <span th:text="${failed}"></span>
-    <div th:each="u : ${user}" class="alert alert -info mt-2">
-        <div th:each="order : ${orders}" class="alert alert -info mt-2">
-            <p th:text="${order.addressFrom}"></p>
-            <p th:text="${order.addressTo}"></p>
-            <p th:text="${order.orderPrice}"></p>
-            <p th:text="${order.orderDistance}"></p>
-        </div>
+    <div th:each="o : ${order}" class="alert alert -info mt-2">
+        <p th:text="${o.addressFrom}"></p>
+        <p th:text="${o.addressTo}"></p>
+        <p th:text="${o.orderPrice}"></p>
+        <p th:text="${o.orderDistance}"></p>
+        <p th:text="${o.orderStartTime}"></p>
+        <p th:text="${o.orderEndTime}"></p>
+        <p th:text="${o.orderStatus}"></p>
+        <p th:text="${o.tariff}"></p>
     </div>
 </div>
 </body>

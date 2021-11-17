@@ -14,22 +14,24 @@
 <body>
 <div class="container mt-5">
     <h1>Cars</h1>
-    <div th:each="c : ${car}" class="alert alert -info mt-2">
-        <p th:text="${c.carNumber}"></p>
-        <p th:text="${c.carModel}"></p>
-        <p th:text="${c.carColor}"></p>
+    <div th:each="u : ${user}" class="alert alert -info mt-2">
+        <div th:each="c : ${car}" class="alert alert -info mt-2">
+            <p th:text="${c.carNumber}"></p>
+            <p th:text="${c.carModel}"></p>
+            <p th:text="${c.carColor}"></p>
 
-        <form th:action="'/admin/car-tariff/' + ${c.id}" method="post">
-            <label for="tariff"></label>
-            <select name="carTariff" id="tariff">
-                <option value="Economy">Economy</option>
-                <option value="Comfort">Comfort</option>
-                <option value="Business">Business</option>
-                <option value="Minivan">Minivan</option>
-                <option value="Cargo">Cargo</option>
-            </select>
-            <button class="btn btn-warning" type="submit">Change</button>
-        </form>
+            <form th:action="'/admin/' + ${u.id} + '/car-tariff/' + ${c.id}" method="post">
+                <label for="tariff"></label>
+                <select name="carTariff" id="tariff">
+                    <option value="Economy">Economy</option>
+                    <option value="Comfort">Comfort</option>
+                    <option value="Business">Business</option>
+                    <option value="Minivan">Minivan</option>
+                    <option value="Cargo">Cargo</option>
+                </select>
+                <button class="btn btn-warning" type="submit">Change</button>
+            </form>
+        </div>
     </div>
 </div>
 </body>

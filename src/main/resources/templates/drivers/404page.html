@@ -13,16 +13,9 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1>Driver History</h1>
-    <span th:text="${success}"></span>
-    <span th:text="${failed}"></span>
     <div th:each="u : ${user}" class="alert alert -info mt-2">
-        <div th:each="order : ${orders}" class="alert alert -info mt-2">
-            <p th:text="${order.addressFrom}"></p>
-            <p th:text="${order.addressTo}"></p>
-            <p th:text="${order.orderPrice}"></p>
-            <p th:text="${order.orderDistance}"></p>
-        </div>
+        <h3>You need to add car to get the orders</h3>
+        <a th:href="'/users/' + ${u.username} + '/driver'" class="btn btn-warning">Go Back</a><br><br>
     </div>
 </div>
 </body>

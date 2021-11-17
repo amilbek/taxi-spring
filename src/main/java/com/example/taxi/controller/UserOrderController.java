@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Log
 @Controller
 public class UserOrderController {
@@ -41,7 +43,7 @@ public class UserOrderController {
             model.addAttribute("failed", Constants.SOMETHING_WRONG);
             return "orders/add-order";
         }
-        Order order = orderService.getCurrentOrderByUser(user);
+        List<Order> order = orderService.getCurrentOrderByUser(user);
         log.info(order.toString());
         model.addAttribute("succeed", Constants.ORDERED_SUCCESSFULLY);
         model.addAttribute("user", user);
@@ -59,7 +61,7 @@ public class UserOrderController {
     @GetMapping("/users/{username}/order-page")
     public String getUserOrderPage(@PathVariable(value = "username") String username, Model model) {
         User user = userService.getUserByUsername(username);
-        Order order = orderService.getCurrentOrderByUser(user);
+        List<Order> order = orderService.getCurrentOrderByUser(user);
         model.addAttribute("user", user);
         model.addAttribute("order", order);
         return "orders/user-order";
@@ -80,6 +82,6 @@ public class UserOrderController {
             return "redirect:/users/{username}/order-page";
         }
         model.addAttribute("success", Constants.CANCELED_SUCCESSFULLY);
-        return "user-history";
+        return "users/user-history";
     }
 }

@@ -39,4 +39,21 @@ public class Order {
         this.orderPrice = orderPrice;
         this.orderStatus = "ordered";
     }
+
+    @Override
+    public String toString() {
+        return "Order[" +
+                "id=" + id +
+                ", addressFrom='" + addressFrom + '\'' +
+                ", addressTo='" + addressTo + '\'' +
+                ", orderStartTime='" + orderStartTime + '\'' +
+                ", orderEndTime='" + orderEndTime + '\'' +
+                ", orderDistance=" + orderDistance +
+                ", tariff='" + tariff + '\'' +
+                ", orderPrice=" + orderPrice +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", user=" + user +
+                ", driver=" + driver +
+                ']';
+    }
 }

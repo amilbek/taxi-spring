@@ -52,14 +52,15 @@ public class AdminController {
         if (!result) {
             model.addAttribute("failed", Constants.SOMETHING_WRONG);
             model.addAttribute("driver", user);
-            return "redirect:/admin/driver-details/{id}";
+            return "redirect:/admin/all-drivers/{id}";
         }
         model.addAttribute("driver", user);
-        return "redirect:/admin/driver-details";
+        return "redirect:/admin/all-drivers/{id}";
     }
 
-    @PostMapping("/admin/car-tariff/{id}")
-    public String changeTariff(@PathVariable(value = "id") Integer carId,
+    @PostMapping("/admin/{id}/car-tariff/{carId}")
+    public String changeTariff(@PathVariable(value = "id") String id,
+                               @PathVariable(value = "carId") Integer carId,
                                @RequestParam String carTariff, Model model) {
         CarTariffRequest carTariffRequest = new CarTariffRequest(carId, carTariff);
         boolean result = carService.changeTariff(carTariffRequest);
@@ -69,17 +70,22 @@ public class AdminController {
             model.addAttribute("car", car);
             return "redirect:/admin/all-cars/{id}";
         }
+        User user = userService.getUserByUsername(id);
         Car car = carService.getCarById(carId);
+        model.addAttribute("user", user);
         model.addAttribute("car", car);
-        return "redirect:/admin/all-cars/{id}";
+        return "redirect:/admin/all-drivers/{id}";
     }
 
-    @GetMapping("/admin/all-cars/{id}/change-tariff")
-    public String changeCarTariff(@PathVariable(value = "id") Integer id, Model model) {
+    @GetMapping("/admin/{username}/{id}/change-tariff")
+    public String changeCarTariff(@PathVariable(value = "username") String username,
+                                  @PathVariable(value = "id") Integer id, Model model) {
         Car car = carService.getCarById(id);
         if (car == null) {
-            return "redirect:/admin/all-car";
+            return "redirect:/admin/all-drivers/{id}";
         }
+        User user = userService.getUserByUsername(username);
+        model.addAttribute("user", user);
         model.addAttribute("car", car);
         return "admin/change-tariff";
     }
@@ -95,7 +101,7 @@ public class AdminController {
         }
         Iterable<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
-        return "admin/all-users";
+        return "redirect:/admin/all-users";
     }
 
     @PostMapping("/admin/delete-driver/{id}")
@@ -109,7 +115,7 @@ public class AdminController {
         }
         Iterable<User> drivers = userService.getAllDrivers();
         model.addAttribute("drivers", drivers);
-        return "admin/all-drivers";
+        return "redirect:/admin/all-drivers";
     }
 
     @GetMapping("/admin/all-users")

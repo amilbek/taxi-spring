@@ -68,7 +68,7 @@ public class DriverController {
         if (!result) {
             log.info("User not become driver");
             model.addAttribute("user", user);
-            return "/users/user-page";
+            return "redirect:/users/{username}/driver-page";
         }
         log.info("User became driver");
         model.addAttribute("succeed", Constants.REGISTRATION_SUCCEED);
@@ -116,6 +116,7 @@ public class DriverController {
     public String getDriverHistoryPage(@PathVariable(value = "username") String username, Model model) {
         User driver = userService.getUserByUsername(username);
         Iterable<Order> orders = orderService.getOrdersByDriver(driver);
+        model.addAttribute("user", driver);
         model.addAttribute("orders", orders);
         return "drivers/driver-history";
     }

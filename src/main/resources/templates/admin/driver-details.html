@@ -14,25 +14,25 @@
 <body>
 <div class="container mt-5">
     <div th:each="d : ${user}" class="alert alert -info mt-2">
-        <p th:text="${d.firstName} + ' ' + ${d.lastName}"></p>
-        <p th:text="${d.username}"></p>
-        <p th:text="${d.phoneNumber}"></p>
-        <p th:text="${d.driverIdNumber}"></p>
-        <p th:text="${d.driverLicenseNumber}"></p>
-        <p th:text="${d.licenseExpDate}"></p>
-        <form th:action="'/admin/driver-status/' + ${d.id}" method="post">
-            <button class="btn btn-warning" type="submit">Active</button>
-        </form>
-        <form th:action="'/admin/delete-driver/' + ${d.id}" method="post">
-            <button class="btn btn-warning" type="submit">Delete</button>
-        </form>
+        <div class="alert alert -info mt-2">
+            <p th:text="${d.firstName} + ' ' + ${d.lastName}"></p>
+            <p th:text="${d.username}"></p>
+            <p th:text="${d.phoneNumber}"></p>
+            <p th:text="${d.driverIdNumber}"></p>
+            <p th:text="${d.driverLicenseNumber}"></p>
+            <p th:text="${d.licenseExpDate}"></p>
+            <form th:action="'/admin/driver-status/' + ${d.id}" method="post">
+                <button class="btn btn-warning" type="submit">Active</button>
+            </form>
+            <form th:action="'/admin/delete-driver/' + ${d.id}" method="post">
+                <button class="btn btn-warning" type="submit">Delete</button>
+            </form>
+        </div>
         <div th:each="c : ${car}" class="alert alert -info mt-2">
             <p th:text="${c.carNumber}"></p>
             <p th:text="${c.carModel}"></p>
             <p th:text="${c.carColor}"></p>
-            <form th:action="'/admin/car-tariff/' + ${c.id}" method="post">
-                <button class="btn btn-warning" type="submit">Change</button>
-            </form>
+            <a th:href="'/admin/' + ${d.id} + '/' + ${c.id} + '/change-tariff'" class="btn btn-warning">Change Tariff</a><br><br>
         </div>
     </div>
 </div>

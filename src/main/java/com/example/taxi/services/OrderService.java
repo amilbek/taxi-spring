@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +46,15 @@ public class OrderService {
 
     public Order getOrder(Integer id) {
         return orderRepository.findById(id.longValue()).orElse(null);
+    }
+
+    public Order getCompletedOrder(Integer id) {
+        Order order = orderRepository.findById(id.longValue()).orElse(null);
+        assert order != null;
+        if (order.getDriver() != null) {
+            return order;
+        }
+        return null;
     }
 
     public boolean acceptOrder(String username, Integer id) {
@@ -165,24 +175,30 @@ public class OrderService {
         return orders;
     }
 
-    public Order getCurrentOrderByUser(User user) {
-        Order order = orderRepository.findByUser(user);
-        if (order.getOrderStatus().equals("ordered")) {
-            return order;
-        }
-        return null;
+    public List<Order> getCurrentOrderByUser(User user) {
+        List<Order> orders = new ArrayList<>();
+        orderRepository.findAll().forEach(order -> {
+            if (order.getUser().equals(user) && order.getOrderStatus().equals("ordered")) {
+                orders.add(order);
+            }
+        });
+        return orders;
     }
 
     public List<Order> getOrdersByUser(User user) {
         List<Order> orders = new ArrayList<>();
-        orders.add(orderRepository.findAllByUser(user));
+        orderRepository.findAll().forEach(order -> {
+            if (order.getUser().equals(user)) {
+                orders.add(order);
+            }
+        });
         return orders;
     }
 
     public List<Order> getOrdersByDriver(User driver) {
         List<Order> orders = new ArrayList<>();
         orderRepository.findAll().forEach(order -> {
-            if (order.getOrderStatus().equals("completed") && Boolean.TRUE.equals(driver.getIsDriver())) {
+            if (order.getOrderStatus().equals("completed") && order.getDriver().equals(driver)) {
                 orders.add(order);
             }
         });
@@ -192,6 +208,9 @@ public class OrderService {
     public List<Order> getAvailableOrders(User user) {
         List<Order> orders = new ArrayList<>();
         Car car = carRepository.findByUser(user);
+        if (car == null) {
+            return Collections.emptyList();
+        }
         orderRepository.findAll().forEach(order -> {
             if (order.getOrderStatus().equals("ordered") && order.getTariff().equals(car.getTariff())) {
                 orders.add(order);
@@ -203,15 +222,23 @@ public class OrderService {
     public boolean deleteOrdersByUser(Integer id) {
         Optional<User> userOptional = userRepository.findById(id.longValue());
         User user = userOptional.orElse(null);
-        List<Order> orders = new ArrayList<>();
-        orders.add(orderRepository.findAllByUser(user));
         if (user == null) {
             return false;
         }
+        List<Order> orders = new ArrayList<>();
+        orderRepository.findAll().forEach(order -> {
+            if (order.getUser().equals(user)) {
+                orders.add(order);
+            }
+        });
         log.info(user.toString());
-        log.info(String.valueOf(orders));
-        for (Order order : orders) {
-            orderRepository.deleteById(order.getId());
+        if (!orders.isEmpty()) {
+            for (Order order : orders) {
+                log.info(order.toString());
+            }
+            for (Order order : orders) {
+                orderRepository.delete(order);
+            }
         }
         return true;
     }
