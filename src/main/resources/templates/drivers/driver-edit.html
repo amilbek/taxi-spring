@@ -11,14 +11,25 @@
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
           crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
+<header>
+    <ul th:each="d : ${driver}">
+        <li><a th:href="'/users/' + ${d.username} + '/car'" class="btn btn-warning">Car</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/avail-orders'" class="btn btn-warning">Available Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver-history'" class="btn btn-warning">History of Orders</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/current-order'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+        <li><a href="/auth/logout">Log Out</a></li>
+    </ul>
+</header>
 <div class="container mt-5">
     <div th:each="u : ${driver}" class="alert alert -info mt-2">
         <form class="form-signin" method="post" th:action="'/users/' + ${u.username} + '/edit-driver'">
             <h2 class="form-signin-heading">Edit</h2>
-            <span th:text="${fail}"></span>
+            <span th:text="${failed}"></span>
             <p>
                 <label for="iin" class="sr-only">Individual Identification Number</label>
                 <input type="text" id="iin" name="driverIdNumber" th:value="${u.driverIdNumber}" class="form-control" placeholder="Individual Identification Number" required>

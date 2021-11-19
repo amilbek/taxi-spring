@@ -13,8 +13,10 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Validated
 @Log
 @Controller
 public class AdminController {
@@ -59,7 +61,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/{id}/car-tariff/{carId}")
-    public String changeTariff(@PathVariable(value = "id") String id,
+    public String changeTariff(@PathVariable(value = "id") Integer id,
                                @PathVariable(value = "carId") Integer carId,
                                @RequestParam String carTariff, Model model) {
         CarTariffRequest carTariffRequest = new CarTariffRequest(carId, carTariff);
@@ -70,7 +72,7 @@ public class AdminController {
             model.addAttribute("car", car);
             return "redirect:/admin/all-cars/{id}";
         }
-        User user = userService.getUserByUsername(id);
+        User user = userService.getUser(id);
         Car car = carService.getCarById(carId);
         model.addAttribute("user", user);
         model.addAttribute("car", car);
@@ -81,6 +83,8 @@ public class AdminController {
     public String changeCarTariff(@PathVariable(value = "username") String username,
                                   @PathVariable(value = "id") Integer id, Model model) {
         Car car = carService.getCarById(id);
+        User admin = userService.getUserByUsername("admin");
+        model.addAttribute("admin", admin);
         if (car == null) {
             return "redirect:/admin/all-drivers/{id}";
         }
@@ -121,6 +125,8 @@ public class AdminController {
     @GetMapping("/admin/all-users")
     public String getAllUsers(Model model) {
         Iterable<User> users = userService.getAllUsers();
+        User admin = userService.getUserByUsername("admin");
+        model.addAttribute("admin", admin);
         model.addAttribute("users", users);
         return "admin/all-users";
     }
@@ -128,20 +134,17 @@ public class AdminController {
     @GetMapping("/admin/all-drivers")
     public String getAllDrivers(Model model) {
         Iterable<User> users = userService.getAllDrivers();
+        User admin = userService.getUserByUsername("admin");
+        model.addAttribute("admin", admin);
         model.addAttribute("drivers", users);
         return "admin/all-drivers";
-    }
-
-    @GetMapping("/admin/all-cars")
-    public String getAllCars(Model model) {
-        Iterable<Car> cars = carService.getAllCars();
-        model.addAttribute("cars", cars);
-        return "admin/all-cars";
     }
 
     @GetMapping("/admin/all-orders")
     public String getAllOrders(Model model) {
         Iterable<Order> orders = orderService.getAllOrders();
+        User admin = userService.getUserByUsername("admin");
+        model.addAttribute("admin", admin);
         model.addAttribute("orders", orders);
         return "admin/all-orders";
     }
@@ -149,6 +152,8 @@ public class AdminController {
     @GetMapping("/admin/all-users/{id}")
     public String getUser(@PathVariable(value ="id") Integer id, Model model) {
         User user = userService.getUser(id);
+        User admin = userService.getUserByUsername("admin");
+        model.addAttribute("admin", admin);
         if (user == null) {
             Iterable<User> users = userService.getAllUsers();
             model.addAttribute("users", users);
@@ -162,6 +167,8 @@ public class AdminController {
     public String getDriver(@PathVariable(value ="id") Integer id, Model model) {
         User user = userService.getUser(id);
         Car car = carService.getCarByUser(id);
+        User admin = userService.getUserByUsername("admin");
+        model.addAttribute("admin", admin);
         if (user == null) {
             Iterable<User> users = userService.getAllDrivers();
             model.addAttribute("drivers", users);
@@ -172,21 +179,11 @@ public class AdminController {
         return "admin/driver-details";
     }
 
-    @GetMapping("/admin/all-cars/{id}")
-    public String getCar(@PathVariable(value ="id") Integer id, Model model) {
-        Car car = carService.getCarById(id);
-        if (car == null) {
-            Iterable<Car> cars = carService.getAllCars();
-            model.addAttribute("cars", cars);
-            return "admin/all-cars";
-        }
-        model.addAttribute("car", car);
-        return "admin/car-details";
-    }
-
     @GetMapping("/admin/all-orders/{id}")
     public String getOrder(@PathVariable(value ="id") Integer id, Model model) {
         Order order = orderService.getOrder(id);
+        User admin = userService.getUserByUsername("admin");
+        model.addAttribute("admin", admin);
         if (order == null) {
             Iterable<Order> orders = orderService.getAllOrders();
             model.addAttribute("orders", orders);

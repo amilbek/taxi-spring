@@ -1,5 +1,6 @@
 package com.example.taxi.security.jwt;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,23 +8,27 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class JwtUser implements UserDetails {
+
     private final Long id;
     private final String firstName;
     private final String lastName;
-    private final String phoneNumber;
     private final String username;
+    private final String phoneNumber;
     private final String password;
     private final boolean enabled;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public JwtUser(Long id,
-                   String firstName,
-                   String lastName,
-                   String phoneNumber,
-                   String username,
-                   String password,
-                   boolean enabled,
-                   Collection<? extends GrantedAuthority> authorities) {
+    public JwtUser(
+            Long id,
+            String firstName,
+            String lastName,
+            String phoneNumber,
+            String username,
+            String password,
+            Collection<? extends GrantedAuthority> authorities,
+            boolean enabled
+
+    ) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -37,29 +42,6 @@ public class JwtUser implements UserDetails {
     @JsonIgnore
     public Long getId() {
         return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @JsonIgnore
-    @Override
-    public String getPassword() {
-        return password;
     }
 
     @Override
@@ -85,8 +67,32 @@ public class JwtUser implements UserDetails {
         return true;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
     @Override
     public boolean isEnabled() {
         return enabled;
     }
+
 }

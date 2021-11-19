@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public final class JwtUserFactory {
+
     private JwtUserFactory() {
     }
 
@@ -18,15 +19,15 @@ public final class JwtUserFactory {
         List<Role> roles = new ArrayList<>();
         roles.add(user.getRole());
         return new JwtUser(
-                        user.getId(),
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getPhoneNumber(),
-                        user.getUsername(),
-                        user.getPassword(),
-                user.getStatus().equals(Status.ACTIVE),
-                mapToGrantedAuthorities(roles)
-                );
+                user.getId(),
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getPhoneNumber(),
+                user.getPassword(),
+                mapToGrantedAuthorities(roles),
+                user.getStatus().equals(Status.ACTIVE)
+        );
     }
 
     private static List<GrantedAuthority> mapToGrantedAuthorities(List<Role> userRoles) {

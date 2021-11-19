@@ -10,20 +10,61 @@
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
           crossorigin="anonymous" />
+    <link rel="stylesheet"  href="/css/style.css">
 </head>
 <body>
+<header>
+    <ul th:each="a : ${admin}">
+        <li><a th:href="'/' + ${a.username} + '/all-users'">All Users</a></li>
+        <li><a th:href="'/' + ${a.username} + '/all-drivers'">All Drivers</a></li>
+        <li><a th:href="'/' + ${a.username} + '/all-orders'">All Orders</a></li>
+        <li><a th:href="'/admin/' + ${a.username}">Admin Page</a></li>
+    </ul>
+</header>
 <div class="container mt-5">
     <div th:each="o : ${order}" class="alert alert -info mt-2">
-        <p th:text="${o.addressFrom}"></p>
-        <p th:text="${o.addressTo}"></p>
-        <p th:text="${o.orderPrice}"></p>
-        <p th:text="${o.orderDistance}"></p>
-        <p th:text="${o.orderStartTime}"></p>
-        <p th:text="${o.orderEndTime}"></p>
-        <p th:text="${o.orderStatus}"></p>
-        <p th:text="${o.tariff}"></p>
-        <p th:text="${o.user.getFirstName} + ' ' + ${o.user.getLastName}"></p>
-        <p th:text="${o.driver.getFirstName} + ' ' + ${o.driver.getLastName}"></p>
+        <table>
+            <tr>
+                <th>Address From</th>
+                <td><p th:text="${o.addressFrom}"></p></td>
+            </tr>
+            <tr>
+                <th>Address To</th>
+                <td><p th:text="${o.addressTo}"></p></td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td><p th:text="${o.orderPrice}"></p></td>
+            </tr>
+            <tr>
+                <th>Distance</th>
+                <td><p th:text="${o.orderDistance}"></p></td>
+            </tr>
+            <tr>
+                <th>Start Time</th>
+                <td><p th:text="${o.orderStartTime}"></p></td>
+            </tr>
+            <tr>
+                <th>End Time</th>
+                <td><p th:text="${o.orderEndTime}"></p></td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td><p th:text="${o.orderStatus}"></p></td>
+            </tr>
+            <tr>
+                <th>Tariff</th>
+                <td><p th:text="${o.tariff}"></p></td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td><p th:text="${o.user.getFirstName} + ' ' + ${o.user.getLastName}"></p></td>
+            </tr>
+            <tr>
+                <th>Driver</th>
+                <td><p th:text="${o.driver.getFirstName} + ' ' + ${o.driver.getLastName}"></p></td>
+            </tr>
+        </table>
     </div>
 </div>
 </body>

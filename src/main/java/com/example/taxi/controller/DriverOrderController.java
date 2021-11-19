@@ -9,10 +9,12 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+@Validated
 @Log
 @Controller
 public class DriverOrderController {
@@ -55,11 +57,11 @@ public class DriverOrderController {
         model.addAttribute("user", user);
         model.addAttribute("order", order);
         model.addAttribute("succeed", Constants.ACCEPTED_SUCCESSFULLY);
-        return "redirect:/users/{username}/driver-order/{id}";
+        return "redirect:/users/{username}/current-order";
     }
 
     @GetMapping("/users/{username}/driver-order/{id}")
-    public String getCurrentOrder(@PathVariable(value = "username") String username,
+    public String getOrder(@PathVariable(value = "username") String username,
                                   @PathVariable(value = "id") Integer id, Model model) {
         User user = userService.getUserByUsername(username);
         Order order = orderService.getOrder(id);
@@ -83,7 +85,7 @@ public class DriverOrderController {
         log.info(order.toString());
         model.addAttribute("user", user);
         model.addAttribute("order", order);
-        return "redirect:/users/{username}/driver-order/{id}";
+        return "redirect:/users/{username}/current-order";
     }
 
     @PostMapping("/users/{username}/start-order/{id}")
@@ -101,7 +103,7 @@ public class DriverOrderController {
         log.info(order.toString());
         model.addAttribute("user", user);
         model.addAttribute("order", order);
-        return "redirect:/users/{username}/driver-order/{id}";
+        return "redirect:/users/{username}/current-order";
     }
 
     @PostMapping("/users/{username}/complete-order/{id}")
@@ -112,13 +114,23 @@ public class DriverOrderController {
         if (!result) {
             Iterable<Order> orders = orderService.getAvailableOrders(user);
             model.addAttribute("orders", orders);
-            model.addAttribute("fail", Constants.SOMETHING_WRONG);
-            return "redirect:/users/{username}/driver-order/{id}";
+            model.addAttribute("failed", Constants.SOMETHING_WRONG);
+            return "redirect:/users/{username}/current-order";
         }
         Order order = orderService.getOrder(id);
         log.info(order.toString());
         model.addAttribute("user", user);
         model.addAttribute("order", order);
         return "redirect:/users/{username}/avail-orders";
+    }
+
+    @GetMapping("/users/{username}/current-order")
+    public String getCurrentOrder(@PathVariable(value = "username") String username,
+                                  Model model) {
+        User driver = userService.getUserByUsername(username);
+        Order order = orderService.getCurrentOrderByDriver(driver);
+        model.addAttribute("user", driver);
+        model.addAttribute("order", order);
+        return "drivers/driver-order";
     }
 }

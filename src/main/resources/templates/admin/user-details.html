@@ -10,13 +10,33 @@
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
           crossorigin="anonymous" />
+    <link rel="stylesheet"  href="/css/style.css">
 </head>
 <body>
+<header>
+    <ul th:each="a : ${admin}">
+        <li><a th:href="'/' + ${a.username} + '/all-users'">All Users</a></li>
+        <li><a th:href="'/' + ${a.username} + '/all-drivers'">All Drivers</a></li>
+        <li><a th:href="'/' + ${a.username} + '/all-orders'">All Orders</a></li>
+        <li><a th:href="'/admin/' + ${a.username}">Admin Page</a></li>
+    </ul>
+</header>
 <div class="container mt-5">
     <div th:each="u : ${user}" class="alert alert -info mt-2">
-        <p th:text="${u.firstName} + ' ' + ${u.lastName}"></p>
-        <p th:text="${u.username}"></p>
-        <p th:text="${u.phoneNumber}"></p>
+        <table>
+            <tr>
+                <th>User</th>
+                <td><p th:text="${u.firstName} + ' ' + ${u.lastName}"></p></td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td><p th:text="${u.username}"></p></td>
+            </tr>
+            <tr>
+                <th>Phone Number</th>
+                <td><p th:text="${u.phoneNumber}"></p></td>
+            </tr>
+        </table>
         <form th:action="'/admin/delete-user/' + ${u.id}" method="post">
             <button class="btn btn-warning" type="submit">Delete</button>
         </form>

@@ -1,5 +1,6 @@
 package com.example.taxi.entity;
 
+import com.example.taxi.constants.Constants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -37,7 +38,7 @@ public class Order {
         this.orderDistance = orderDistance;
         this.tariff = tariff;
         this.orderPrice = orderPrice;
-        this.orderStatus = "ordered";
+        this.orderStatus = Constants.ORDERED_STATUS;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.taxi.services;
 
+import com.example.taxi.constants.Constants;
 import com.example.taxi.entity.Car;
 import com.example.taxi.entity.Order;
 import com.example.taxi.entity.User;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.Math.sqrt;
 
@@ -39,22 +41,15 @@ public class OrderService {
         Order order = new Order(orderRequest.getAddressFrom(), orderRequest.getAddressTo(),
                 getDistance(), orderRequest.getTariff(), getPrice(orderRequest.getTariff()));
         User user = userRepository.findByUsername(username);
+        User driver = userRepository.findByUsername(Constants.DEFAULT_DRIVER);
         order.setUser(user);
+        order.setDriver(driver);
         orderRepository.save(order);
         return true;
     }
 
     public Order getOrder(Integer id) {
         return orderRepository.findById(id.longValue()).orElse(null);
-    }
-
-    public Order getCompletedOrder(Integer id) {
-        Order order = orderRepository.findById(id.longValue()).orElse(null);
-        assert order != null;
-        if (order.getDriver() != null) {
-            return order;
-        }
-        return null;
     }
 
     public boolean acceptOrder(String username, Integer id) {
@@ -64,8 +59,9 @@ public class OrderService {
         Car car = carRepository.findByUser(driver);
         assert driver != null;
         assert order != null;
-        if (!order.getOrderStatus().equals("ordered") || Boolean.TRUE.equals(!driver.getIsAvailable())
-        || !order.getTariff().equals(car.getTariff())) {
+        if (!order.getOrderStatus().equals(Constants.ORDERED_STATUS) ||
+                Boolean.TRUE.equals(!driver.getIsAvailable()) ||
+                !order.getTariff().equals(car.getTariff())) {
             return false;
         }
         order.setDriver(driver);
@@ -78,10 +74,10 @@ public class OrderService {
         Optional<Order> orderOptional = orderRepository.findById(orderId.longValue());
         Order order = orderOptional.orElse(null);
         assert order != null;
-        if (!order.getOrderStatus().equals("accepted")) {
+        if (!order.getOrderStatus().equals(Constants.ACCEPTED_STATUS)) {
             return false;
         }
-        order.setOrderStatus("waited");
+        order.setOrderStatus(Constants.WAITED_STATUS);
         orderRepository.save(order);
         return true;
     }
@@ -90,10 +86,10 @@ public class OrderService {
         Optional<Order> orderOptional = orderRepository.findById(id.longValue());
         Order order = orderOptional.orElse(null);
         assert order != null;
-        if (!order.getOrderStatus().equals("accepted")) {
+        if (!order.getOrderStatus().equals(Constants.ACCEPTED_STATUS)) {
             return false;
         }
-        order.setOrderStatus("started");
+        order.setOrderStatus(Constants.STARTED_STATUS);
         order.setOrderStartTime(dateTimeFormatter());
         orderRepository.save(order);
         return true;
@@ -103,12 +99,11 @@ public class OrderService {
         Optional<Order> orderOptional = orderRepository.findById(id.longValue());
         Order order = orderOptional.orElse(null);
         assert order != null;
-        if (order.getOrderStatus().equals("completed")) {
+        if (!order.getOrderStatus().equals(Constants.ORDERED_STATUS)) {
             return false;
         }
-        order.setOrderStatus("canceled");
+        order.setOrderStatus(Constants.CANCELED_STATUS);
         order.setOrderEndTime(dateTimeFormatter());
-
         orderRepository.save(order);
         return true;
     }
@@ -117,10 +112,10 @@ public class OrderService {
         Optional<Order> orderOptional = orderRepository.findById(id.longValue());
         Order order = orderOptional.orElse(null);
         assert order != null;
-        if (!order.getOrderStatus().equals("started")) {
+        if (!order.getOrderStatus().equals(Constants.STARTED_STATUS)) {
             return false;
         }
-        order.setOrderStatus("completed");
+        order.setOrderStatus(Constants.COMPLETED_STATUS);
         order.setOrderEndTime(dateTimeFormatter());
         orderRepository.save(order);
         return true;
@@ -141,19 +136,19 @@ public class OrderService {
     public double getPrice(String chosenTariff) {
         double tariffPrice = 0.0;
         switch (chosenTariff) {
-            case "economy":
+            case Constants.ECONOMY_TARIFF:
                 tariffPrice = 80.0;
                 break;
-            case "comfort":
+            case Constants.COMFORT_TARIFF:
                 tariffPrice = 120.0;
                 break;
-            case "business":
+            case Constants.BUSINESS_TARIFF:
                 tariffPrice = 140.0;
                 break;
-            case "minivan":
+            case Constants.MINIVAN_TARIFF:
                 tariffPrice = 150.0;
                 break;
-            case "cargo":
+            case Constants.CARGO_TARIFF:
                 tariffPrice = 180.0;
                 break;
             default:
@@ -161,7 +156,6 @@ public class OrderService {
         }
         return getDistance() * tariffPrice;
     }
-
 
     private String dateTimeFormatter() {
         LocalDateTime currentTime = LocalDateTime.now();
@@ -175,14 +169,29 @@ public class OrderService {
         return orders;
     }
 
-    public List<Order> getCurrentOrderByUser(User user) {
+    public Order getCurrentOrderByUser(User user) {
         List<Order> orders = new ArrayList<>();
-        orderRepository.findAll().forEach(order -> {
-            if (order.getUser().equals(user) && order.getOrderStatus().equals("ordered")) {
-                orders.add(order);
+        orderRepository.findAll().forEach(orders::add);
+        for (Order order : orders) {
+            if (order.getUser().equals(user) && order.getOrderStatus().equals(Constants.ORDERED_STATUS)) {
+                return order;
             }
-        });
-        return orders;
+        }
+        return null;
+    }
+
+    public Order getCurrentOrderByDriver(User driver) {
+        List<Order> orders = new ArrayList<>();
+        orderRepository.findAll().forEach(orders::add);
+        for (Order order : orders) {
+            if (order.getDriver().equals(driver) &&
+                    (order.getOrderStatus().equals(Constants.ACCEPTED_STATUS) ||
+                            order.getOrderStatus().equals(Constants.WAITED_STATUS) ||
+                            order.getOrderStatus().equals(Constants.STARTED_STATUS))) {
+                return order;
+            }
+        }
+        return null;
     }
 
     public List<Order> getOrdersByUser(User user) {
@@ -198,7 +207,7 @@ public class OrderService {
     public List<Order> getOrdersByDriver(User driver) {
         List<Order> orders = new ArrayList<>();
         orderRepository.findAll().forEach(order -> {
-            if (order.getOrderStatus().equals("completed") && order.getDriver().equals(driver)) {
+            if (order.getDriver().equals(driver)) {
                 orders.add(order);
             }
         });
@@ -212,7 +221,8 @@ public class OrderService {
             return Collections.emptyList();
         }
         orderRepository.findAll().forEach(order -> {
-            if (order.getOrderStatus().equals("ordered") && order.getTariff().equals(car.getTariff())) {
+            if (order.getOrderStatus().equals(Constants.ORDERED_STATUS) &&
+                    order.getTariff().equals(car.getTariff())) {
                 orders.add(order);
             }
         });

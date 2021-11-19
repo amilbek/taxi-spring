@@ -11,26 +11,45 @@
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
           crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
+<header>
+    <ul th:each="d : ${driver}">
+        <li><a th:href="'/users/' + ${d.username} + '/car'" class="btn btn-warning">Car</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/avail-orders'" class="btn btn-warning">Available Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver-history'" class="btn btn-warning">History of Orders</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/current-order'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+        <li><a href="/auth/logout">Log Out</a></li>
+    </ul>
+</header>
 <div class="container mt-5">
     <div th:each="u : ${user}" class="alert alert -info mt-2">
         <div th:each="c : ${car}" class="alert alert -info mt-2">
             <form class="form-signin" method="post" th:action="'/users/' + ${u.username} + '/' + ${c.id} + '/car-edit'">
                 <h2 class="form-signin-heading">Edit Car</h2>
-                <p>
-                    <label for="carnumber" class="sr-only">Car Number</label>
-                    <input type="text" id="carnumber" name="carNumber" th:value="${c.carNumber}" class="form-control" placeholder="Car Number" required autofocus>
-                </p>
-                <p>
-                    <label for="carmodel" class="sr-only">Car Model</label>
-                    <input type="text" id="carmodel" name="carModel" th:value="${c.carModel}" class="form-control" placeholder="Car Model" required autofocus>
-                </p>
-                <p>
-                    <label for="carcolor" class="sr-only">Car Color</label>
-                    <input type="text" id="carcolor" name="carColor" th:value="${c.carColor}" class="form-control" placeholder="Car Color" required autofocus>
-                </p>
+                <table>
+                    <tr>
+                        <th><label for="carnumber" class="sr-only">Car Number</label></th>
+                        <td>
+                            <input type="text" id="carnumber" name="carNumber" th:value="${c.carNumber}" class="form-control" placeholder="Car Number" required autofocus>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="carmodel" class="sr-only">Car Model</label></th>
+                        </td>
+                            <input type="text" id="carmodel" name="carModel" th:value="${c.carModel}" class="form-control" placeholder="Car Model" required autofocus>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="carcolor" class="sr-only">Car Color</label></th>
+                        </td>
+                            <input type="text" id="carcolor" name="carColor" th:value="${c.carColor}" class="form-control" placeholder="Car Color" required autofocus>
+                        </td>
+                    </tr>
+                </table>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Refresh</button>
             </form>
         </div>

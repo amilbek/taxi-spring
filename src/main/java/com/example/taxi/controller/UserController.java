@@ -11,9 +11,10 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
+@Validated
 @Log
 @Controller
 public class UserController {
@@ -107,7 +108,7 @@ public class UserController {
     public String getMyOrder(@PathVariable(value = "username") String username,
                              @PathVariable(value = "id") Integer id, Model model) {
         User user = userService.getUserByUsername(username);
-        Order order = orderService.getCompletedOrder(id);
+        Order order = orderService.getOrder(id);
         model.addAttribute("user", user);
         model.addAttribute("order", order);
         return "users/order-detail";

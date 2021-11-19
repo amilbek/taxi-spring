@@ -1,5 +1,6 @@
 package com.example.taxi.entity;
 
+import com.example.taxi.constants.Constants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public class Car {
         this.carNumber = carNumber;
         this.carModel = carModel;
         this.carColor = carColor;
+        tariff = "Not Chosen";
     }
 
     @Override

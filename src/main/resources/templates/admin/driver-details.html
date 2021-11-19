@@ -10,29 +10,79 @@
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
           crossorigin="anonymous" />
+    <link rel="stylesheet"  href="/css/style.css">
 </head>
 <body>
+<header>
+    <ul th:each="a : ${admin}">
+        <li><a th:href="'/' + ${a.username} + '/all-users'">All Users</a></li>
+        <li><a th:href="'/' + ${a.username} + '/all-drivers'">All Drivers</a></li>
+        <li><a th:href="'/' + ${a.username} + '/all-orders'">All Orders</a></li>
+        <li><a th:href="'/admin/' + ${a.username}">Admin Page</a></li>
+    </ul>
+</header>
 <div class="container mt-5">
     <div th:each="d : ${user}" class="alert alert -info mt-2">
         <div class="alert alert -info mt-2">
-            <p th:text="${d.firstName} + ' ' + ${d.lastName}"></p>
-            <p th:text="${d.username}"></p>
-            <p th:text="${d.phoneNumber}"></p>
-            <p th:text="${d.driverIdNumber}"></p>
-            <p th:text="${d.driverLicenseNumber}"></p>
-            <p th:text="${d.licenseExpDate}"></p>
-            <form th:action="'/admin/driver-status/' + ${d.id}" method="post">
-                <button class="btn btn-warning" type="submit">Active</button>
-            </form>
-            <form th:action="'/admin/delete-driver/' + ${d.id}" method="post">
-                <button class="btn btn-warning" type="submit">Delete</button>
-            </form>
+            <table>
+                <tr>
+                    <th>Driver</th>
+                    <td><p th:text="${d.firstName} + ' ' + ${d.lastName}"></p></td>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <td><p th:text="${d.username}"></p></td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td><p th:text="${d.phoneNumber}"></p></td>
+                </tr>
+                <tr>
+                    <th>ID Number</th>
+                    <td><p th:text="${d.driverIdNumber}"></p></td>
+                </tr>
+                <tr>
+                    <th>License Number</th>
+                    <td><p th:text="${d.driverLicenseNumber}"></p></td>
+                </tr>
+                <tr>
+                    <th>License Expiration Date</th>
+                    <td><p th:text="${d.licenseExpDate}"></p></td>
+                </tr>
+            <tr>
+                <td>
+                    <form th:action="'/admin/driver-status/' + ${d.id}" method="post">
+                        <button class="btn btn-warning" type="submit">Active</button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="'/admin/delete-driver/' + ${d.id}" method="post">
+                        <button class="btn btn-warning" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </table>
         </div>
         <div th:each="c : ${car}" class="alert alert -info mt-2">
-            <p th:text="${c.carNumber}"></p>
-            <p th:text="${c.carModel}"></p>
-            <p th:text="${c.carColor}"></p>
-            <a th:href="'/admin/' + ${d.id} + '/' + ${c.id} + '/change-tariff'" class="btn btn-warning">Change Tariff</a><br><br>
+            <table>
+                <tr>
+                    <th>Car Number</th>
+                    <td><p th:text="${c.carNumber}"></p></td>
+                </tr>
+                <tr>
+                    <th>Car Model</th>
+                    <td><p th:text="${c.carModel}"></p></td>
+                </tr>
+                <tr>
+                    <th>Car Color</th>
+                    <td><p th:text="${c.carColor}"></p></td>
+                </tr>
+                <tr>
+                    <th>Car Tariff</th>
+                    <td><p th:text="${c.tariff}"></p></td>
+                </tr>
+            </table>
+            <a th:href="'/admin/' + ${d.username} + '/' + ${c.id} + '/change-tariff'" class="btn btn-warning">Change Tariff</a><br><br>
         </div>
     </div>
 </div>

@@ -10,22 +10,53 @@
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
           crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+<header>
+    <ul th:each="d : ${driver}">
+        <li><a th:href="'/users/' + ${d.username} + '/car'" class="btn btn-warning">Car</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/avail-orders'" class="btn btn-warning">Available Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver-history'" class="btn btn-warning">History of Orders</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/current-order'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+        <li><a href="/auth/logout">Log Out</a></li>
+    </ul>
+</header>
 <div class="container mt-5">
     <div th:each="d : ${driver}" class="alert alert -info mt-2">
-        <p th:text="${d.firstName}"></p>
-        <p th:text="${d.lastName}"></p>
-        <p th:text="${d.username}"></p>
-        <p th:text="${d.phoneNumber}"></p>
-        <p th:text="${d.driverIdNumber}"></p>
-        <p th:text="${d.driverLicenseNumber}"></p>
-        <p th:text="${d.licenseExpDate}"></p>
+        <table>
+            <tr>
+                <th></th>
+                <td><p th:text="${d.firstName}"></p></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><p th:text="${d.lastName}"></p></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><p th:text="${d.username}"></p></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><p th:text="${d.phoneNumber}"></p></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><p th:text="${d.driverIdNumber}"></p></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><p th:text="${d.driverLicenseNumber}"></p></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><p th:text="${d.licenseExpDate}"></p></td>
+            </tr>
+        </table>
         <a th:href="'/users/' + ${d.username} + '/driver-edit'" class="btn btn-warning">Edit</a><br><br>
-        <a th:href="'/users/' + ${d.username} + '/car'" class="btn btn-warning">Car</a><br><br>
-        <a th:href="'/users/' + ${d.username} + '/avail-orders'" class="btn btn-warning">Orders</a><br><br>
-        <a th:href="'/users/' + ${d.username} + '/driver-history'" class="btn btn-warning">History</a><br><br>
-        <a th:href="'/users/' + ${d.username}" class="btn btn-warning">User Page</a><br><br>
     </div>
 </div>
 </body>

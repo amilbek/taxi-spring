@@ -10,20 +10,55 @@
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
           crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+<header>
+    <ul th:each="d : ${driver}">
+        <li><a th:href="'/users/' + ${d.username} + '/car'" class="btn btn-warning">Car</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/avail-orders'" class="btn btn-warning">Available Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver-history'" class="btn btn-warning">History of Orders</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/current-order'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+        <li><a href="/auth/logout">Log Out</a></li>
+    </ul>
+</header>
 <div class="container mt-5">
     <div th:each="u : ${user}" class="alert alert -info mt-2">
         <div th:each="c : ${car}" class="alert alert -info mt-2">
-            <p th:text="${c.carNumber}"></p>
-            <p th:text="${c.carModel}"></p>
-            <p th:text="${c.carColor}"></p>
-            <p th:text="${c.tariff}"></p>
-            <a th:href="'/users/' + ${u.username} + '/' + ${c.id} + '/edit-car'" class="btn btn-warning">Edit</a><br><br>
-            <form th:action="'/users/' + ${u.username} + '/' + ${c.id} + '/delete'" method="post">
-                <button class="btn btn-warning" type="submit">Delete</button>
-            </form><br><br>
-            <a th:href="'/users/' + ${u.username} + '/driver'" class="btn btn-warning">Go Back</a><br><br>
+            <table>
+                <tr>
+                    <th>Car Number</th>
+                    <td><p th:text="${c.carNumber}"></p></td>
+                </tr>
+                <tr>
+                    <th>Car Model</th>
+                    <td><p th:text="${c.carModel}"></p></td>
+                </tr>
+                <tr>
+                    <th>Car Color</th>
+                    <td><p th:text="${c.carColor}"></p></td>
+                </tr>
+                <tr>
+                    <th>Tariff</th>
+                    <td><p th:text="${c.tariff}"></p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <a th:href="'/users/' + ${u.username} + '/' + ${c.id} + '/edit-car'" class="btn btn-warning">Edit</a><br><br>
+                    </td>
+                    <td>
+                        <form th:action="'/users/' + ${u.username} + '/' + ${c.id} + '/delete'" method="post">
+                            <button class="btn btn-warning" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+
+
+
+
         </div>
     </div>
 </div>

@@ -10,8 +10,19 @@
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
           crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+<header>
+    <ul th:each="u : ${user}">
+        <li><a th:href="'/users/' + ${u.username} + '/add-order'">Add Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/history'">My Orders</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/order-page'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+        <li><a href="/auth/logout">Log Out</a></li>
+    </ul>
+</header>
 <div class="container mt-5">
     <h2 th:text="${greeting}"></h2>
     <div th:each="u : ${user}" class="alert alert -info mt-2">
@@ -32,18 +43,17 @@
                 <th>Phone Number</th>
                 <td><p th:text="${u.phoneNumber}"></p></td>
             </tr>
+            <tr>
+                <td>
+                    <a th:href="'/users/' + ${u.username} + '/edit-page'" class="btn btn-warning">Edit</a><br><br>
+                </td>
+                <td>
+                    <form th:action="'/users/' + ${u.id} + '/delete'" method="post">
+                        <button class="btn btn-warning" type="submit">Delete</button>
+                    </form><br><br>
+                </td>
+            </tr>
         </table>
-        <a th:href="'/users/' + ${u.username} + '/edit-page'" class="btn btn-warning">Edit</a><br><br>
-        <form th:action="'/users/' + ${u.id} + '/delete'" method="post">
-            <button class="btn btn-warning" type="submit">Delete</button>
-        </form>
-        <br><br>
-        <a th:href="'/users/' + ${u.username} + '/add-order'" class="btn btn-warning">Order</a><br><br>
-        <a th:href="'/users/' + ${u.username} + '/history'" class="btn btn-warning">My Orders</a><br><br>
-        <a th:href="'/users/' + ${u.username} + '/driver'" class="btn btn-warning">Driver</a><br><br>
-<!--        <form  method="get">-->
-            <a href="/auth/logout" class="btn btn-warning" type="submit">Log Out</a><br><br>
-<!--        </form>-->
     </div>
 </div>
 </body>

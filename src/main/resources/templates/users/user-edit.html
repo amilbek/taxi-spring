@@ -11,29 +11,57 @@
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
           crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
+<header>
+    <ul th:each="u : ${user}">
+        <li><a th:href="'/users/' + ${u.username} + '/add-order'">Add Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/history'">My Orders</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/order-page'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+        <li><a href="/auth/logout" type="submit">Log Out</a></li>
+    </ul>
+</header>
 <div class="container mt-5">
     <div th:each="u : ${user}" class="alert alert -info mt-2">
         <form class="form-signin" method="post" th:action="'/users/' + ${u.username} + '/edit'">
             <h2 class="form-signin-heading">Edit</h2>
-            <p>
-                <label for="firstname" class="sr-only">First Name</label>
-                <input type="text" id="firstname" name="firstName" th:value="${u.firstName}" class="form-control" placeholder="First Name" required autofocus>
-            </p>
-            <p>
-                <label for="lastname" class="sr-only">Last Name</label>
-                <input type="text" id="lastname" name="lastName" th:value="${u.lastName}" class="form-control" placeholder="Last Name" required autofocus>
-            </p>
-            <p>
-                <label for="phonenumber" class="sr-only">Phone Number</label>
-                <input type="text" id="phonenumber" name="phoneNumber" th:value="${u.phoneNumber}" class="form-control" placeholder="Phone Number" required autofocus>
-            </p>
-            <p>
-                <label for="username" class="sr-only">Username</label>
-                <input type="text" id="username" name="username" th:value="${u.username}" class="form-control" placeholder="Username" required autofocus>
-            </p>
+            <table>
+            <tr>
+                <th>
+                    <label for="firstname" class="sr-only">First Name</label>
+                </th>
+                <td>
+                    <input type="text" id="firstname" name="firstName" th:value="${u.firstName}" class="form-control" placeholder="First Name" required autofocus>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label for="lastname" class="sr-only">Last Name</label>
+                </th>
+                <td>
+                    <input type="text" id="lastname" name="lastName" th:value="${u.lastName}" class="form-control" placeholder="Last Name" required autofocus>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label for="phonenumber" class="sr-only">Phone Number</label>
+                </th>
+                <td>
+                    <input type="text" id="phonenumber" name="phoneNumber" th:value="${u.phoneNumber}" class="form-control" placeholder="Phone Number" required autofocus>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label for="username" class="sr-only">Username</label>
+                </th>
+                <td>
+                    <input type="text" id="username" name="username" th:value="${u.username}" class="form-control" placeholder="Username" required autofocus>
+                </td>
+            </tr>
+            </table>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Refresh</button>
         </form>
     </div>

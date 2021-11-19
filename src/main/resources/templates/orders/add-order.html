@@ -11,9 +11,19 @@
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
           crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
+<header>
+    <ul th:each="u : ${user}">
+        <li><a th:href="'/users/' + ${u.username} + '/add-order'">Add Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/history'">My Orders</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/order-page'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+        <li><a href="/auth/logout" type="submit">Log Out</a></li>
+    </ul>
+</header>
 <div class="container">
     <div th:each="u : ${user}" class="alert alert -info mt-2">
         <form class="form-signin" method="post" th:action="'/users/' + ${u.username} + '/order'">
@@ -29,11 +39,11 @@
             <p>
                 <label for="tariff" class="sr-only">Tariff</label>
                 <select name="tariff" id="tariff">
-                    <option value="economy">Economy</option>
-                    <option value="comfort">Comfort</option>
-                    <option value="business">Business</option>
-                    <option value="minivan">Minivan</option>
-                    <option value="cargo">Cargo</option>
+                    <option value="economy">Economy - 80</option>
+                    <option value="comfort">Comfort - 120</option>
+                    <option value="business">Business - 140</option>
+                    <option value="minivan">Minivan - 150</option>
+                    <option value="cargo">Cargo - 180</option>
                 </select>
             </p>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>

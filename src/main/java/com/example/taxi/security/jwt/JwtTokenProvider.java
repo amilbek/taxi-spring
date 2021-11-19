@@ -2,7 +2,6 @@ package com.example.taxi.security.jwt;
 
 import com.example.taxi.entity.Role;
 import io.jsonwebtoken.*;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 
-@Log
 @Component
 public class JwtTokenProvider {
 
@@ -45,9 +43,9 @@ public class JwtTokenProvider {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    public String createToken(String phoneNumber, Role role) {
+    public String createToken(String username, Role role) {
 
-        Claims claims = Jwts.claims().setSubject(phoneNumber);
+        Claims claims = Jwts.claims().setSubject(username);
         claims.put("roles", role);
 
         Date now = new Date();
@@ -82,18 +80,13 @@ public class JwtTokenProvider {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
 
-            return !claims.getBody().getExpiration().before(new Date());
-        } catch (ExpiredJwtException expEx) {
-            log.severe("Token expired");
-        } catch (UnsupportedJwtException unsEx) {
-            log.severe("Unsupported jwt");
-        } catch (MalformedJwtException mjEx) {
-            log.severe("Malformed jwt");
-        } catch (SignatureException sEx) {
-            log.severe("Invalid signature");
-        } catch (Exception e) {
-            log.severe("invalid token");
+            if (claims.getBody().getExpiration().before(new Date())) {
+                return !claims.getBody().getExpiration().before(new Date());
+            }
+
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new JwtAuthenticationException("JWT token is expired or invalid");
         }
-        return false;
     }
 }

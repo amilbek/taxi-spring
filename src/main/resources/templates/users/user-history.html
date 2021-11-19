@@ -10,8 +10,19 @@
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
           crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+<header>
+    <ul th:each="u : ${user}">
+        <li><a th:href="'/users/' + ${u.username} + '/add-order'">Add Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/history'">My Orders</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/order-page'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+        <li><a href="/auth/logout" type="submit">Log Out</a></li>
+    </ul>
+</header>
 <div class="container mt-5">
     <h1>Orders</h1>
     <div th:each="u : ${user}" class="alert alert -info mt-2">

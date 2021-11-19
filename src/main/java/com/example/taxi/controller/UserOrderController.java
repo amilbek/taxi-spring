@@ -10,13 +10,13 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
+@Validated
 @Log
 @Controller
 public class UserOrderController {
@@ -43,7 +43,7 @@ public class UserOrderController {
             model.addAttribute("failed", Constants.SOMETHING_WRONG);
             return "orders/add-order";
         }
-        List<Order> order = orderService.getCurrentOrderByUser(user);
+        Order order = orderService.getCurrentOrderByUser(user);
         log.info(order.toString());
         model.addAttribute("succeed", Constants.ORDERED_SUCCESSFULLY);
         model.addAttribute("user", user);
@@ -61,17 +61,16 @@ public class UserOrderController {
     @GetMapping("/users/{username}/order-page")
     public String getUserOrderPage(@PathVariable(value = "username") String username, Model model) {
         User user = userService.getUserByUsername(username);
-        List<Order> order = orderService.getCurrentOrderByUser(user);
+        Order order = orderService.getCurrentOrderByUser(user);
         model.addAttribute("user", user);
         model.addAttribute("order", order);
-        return "orders/user-order";
+        return "users/user-order";
     }
 
-    @PostMapping("/users/{username}/cancel-order/{id}")
-    public String cancelOrder(@PathVariable(value = "username") String username,
-                              @PathVariable(value = "id") Integer id, Model model) {
+    @PostMapping("/users/{username}/cancel-order")
+    public String cancelOrder(@PathVariable(value = "username") String username, Model model) {
         User user = userService.getUserByUsername(username);
-        Order order = orderService.getOrder(id);
+        Order order = orderService.getCurrentOrderByUser(user);
         boolean result = orderService.cancelOrder(user.getId().intValue());
         Iterable<Order> orders = orderService.getOrdersByUser(user);
         model.addAttribute("orders", orders);

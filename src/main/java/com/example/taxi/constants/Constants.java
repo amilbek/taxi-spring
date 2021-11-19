@@ -22,6 +22,18 @@ public class Constants {
     public static final String NOT_ACCEPTED = "You have not got Driver status yet";
     public static final String NOT_COMPLETED = "You have not started move yet";
     public static final String ORDER_ACCEPTED = "Your order have already accepted";
+    public static final String ORDERED_STATUS = "ordered";
+    public static final String ACCEPTED_STATUS = "accepted";
+    public static final String CANCELED_STATUS = "canceled";
+    public static final String STARTED_STATUS = "started";
+    public static final String COMPLETED_STATUS = "completed";
+    public static final String WAITED_STATUS = "waited";
+    public static final String ECONOMY_TARIFF = "economy";
+    public static final String COMFORT_TARIFF = "comfort";
+    public static final String BUSINESS_TARIFF = "business";
+    public static final String MINIVAN_TARIFF = "minivan";
+    public static final String CARGO_TARIFF = "cargo";
+    public static final String DEFAULT_DRIVER = "default_driver";
 
     private Constants() {
     }
