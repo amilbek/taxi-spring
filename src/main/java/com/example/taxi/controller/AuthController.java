@@ -62,20 +62,27 @@ public class AuthController {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
+
             User user = userService.getUserByUsername(username);
+
             String token = jwtTokenProvider.createToken(username, user.getRole());
+
             Map<Object, Object> response = new HashMap<>();
             response.put("username", username);
             response.put("token", token);
 
-            log.info("username: " + response.get("username") + "\n" +
-                     "token: " + response.get("token"));
+            log.info("username: " + response.get("username"));
+            log.info("token: " + response.get("token"));
+
             String greeting = Constants.LOGIN_SUCCEED + " " + username;
+
             model.addAttribute("greeting", greeting);
             model.addAttribute("user", user);
+
             if (username.equals("admin")) {
                 return "redirect:/admin/" + username;
             }
+
             return "redirect:/users/" + username;
         } catch (AuthenticationException e) {
             model.addAttribute("failed", Constants.LOGIN_FAILED);

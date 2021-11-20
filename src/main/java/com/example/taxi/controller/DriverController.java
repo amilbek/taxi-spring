@@ -3,7 +3,9 @@ package com.example.taxi.controller;
 import com.example.taxi.constants.Constants;
 import com.example.taxi.entity.Order;
 import com.example.taxi.entity.User;
+import com.example.taxi.models.DriverStatusRequest;
 import com.example.taxi.models.UserRequest;
+import com.example.taxi.services.CarService;
 import com.example.taxi.services.OrderService;
 import com.example.taxi.services.UserService;
 import lombok.extern.java.Log;
@@ -25,11 +27,13 @@ public class DriverController {
 
     private final UserService userService;
     private final OrderService orderService;
+    private final CarService carService;
 
     @Autowired
-    public DriverController(UserService userService, OrderService orderService) {
+    public DriverController(UserService userService, OrderService orderService, CarService carService) {
         this.userService = userService;
         this.orderService = orderService;
+        this.carService = carService;
     }
 
     @GetMapping("/users/{username}/driver")
@@ -68,7 +72,7 @@ public class DriverController {
                 driverIdNumber, driverLicenseNumber, licenseExpDate);
         boolean result = userService.becomeDriver(Math.toIntExact(user.getId()), userRequest);
         if (!result) {
-            log.info("User not become driver");
+            log.info("User did not become driver");
             model.addAttribute("user", user);
             return "redirect:/users/{username}/driver-page";
         }
@@ -118,8 +122,24 @@ public class DriverController {
     public String getDriverHistoryPage(@PathVariable(value = "username") String username, Model model) {
         User driver = userService.getUserByUsername(username);
         Iterable<Order> orders = orderService.getOrdersByDriver(driver);
-        model.addAttribute("user", driver);
+        model.addAttribute("driver", driver);
         model.addAttribute("orders", orders);
         return "drivers/driver-history";
+    }
+
+    @PostMapping("/users/{id}/delete-driver")
+    public String deleteUser(@PathVariable(value = "id") Integer id, Model model) {
+        User user = userService.getUser(id);
+        boolean result1 = carService.deleteCarByUser(user);
+        DriverStatusRequest driverStatusRequest = new DriverStatusRequest(Math.toIntExact(user.getId()), false);
+        boolean result2 = userService.changeStatus(driverStatusRequest);
+        if (!result1 || !result2) {
+            log.info(user.toString());
+            model.addAttribute("user", user);
+            model.addAttribute("failed", Constants.DELETING_FAILED);
+            return "users/user-page";
+        }
+        log.info("User deleted");
+        return "redirect:/users/{username}/driver-register";
     }
 }

@@ -2,6 +2,7 @@ package com.example.taxi.services;
 
 import com.example.taxi.constants.Constants;
 import com.example.taxi.entity.Role;
+import com.example.taxi.entity.Status;
 import com.example.taxi.entity.User;
 import com.example.taxi.helpers.PasswordValidationHelper;
 import com.example.taxi.helpers.ValidateHelper;
@@ -45,7 +46,7 @@ public class UserService {
                 userRequest.getPhoneNumber(), userRequest.getUsername(), userRequest.getPassword());
         Role roleAdmin = roleRepository.findByName(Constants.ROLE_USER);
         user.setRole(roleAdmin);
-        user.setStatus(roleAdmin.getStatus());
+        user.setStatus(Status.ACTIVE);
         userRepository.save(user);
         return true;
     }
@@ -73,10 +74,7 @@ public class UserService {
         return true;
     }
 
-    public boolean deleteUser(Integer id) {
-        Optional<User> userOptional = userRepository.findById(id.longValue());
-        User user = userOptional.orElse(null);
-        assert user != null;
+    public boolean deleteUser(User user) {
         userRepository.delete(user);
         return true;
     }

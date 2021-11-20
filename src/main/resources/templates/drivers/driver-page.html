@@ -15,12 +15,12 @@
 <body>
 <header>
     <ul th:each="d : ${driver}">
-        <li><a th:href="'/users/' + ${d.username} + '/car'" class="btn btn-warning">Car</a></li>
-        <li><a th:href="'/users/' + ${d.username} + '/avail-orders'" class="btn btn-warning">Available Orders</a></li>
-        <li><a th:href="'/users/' + ${d.username} + '/driver-history'" class="btn btn-warning">History of Orders</a></li>
-        <li><a th:href="'/users/' + ${u.username} + '/current-order'">Current Order</a></li>
-        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
-        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/car'">Car</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/avail-orders'">Available Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver-history'">History of Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/current-order'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${d.username}">User Page</a></li>
         <li><a href="/auth/logout">Log Out</a></li>
     </ul>
 </header>
@@ -28,35 +28,40 @@
     <div th:each="d : ${driver}" class="alert alert -info mt-2">
         <table>
             <tr>
-                <th></th>
-                <td><p th:text="${d.firstName}"></p></td>
+                <th>Driver</th>
+                <td><p th:text="${d.firstName} + ' ' + ${d.lastName}"></p></td>
             </tr>
             <tr>
-                <th></th>
-                <td><p th:text="${d.lastName}"></p></td>
-            </tr>
-            <tr>
-                <th></th>
+                <th>Username</th>
                 <td><p th:text="${d.username}"></p></td>
             </tr>
             <tr>
-                <th></th>
+                <th>Phone Number</th>
                 <td><p th:text="${d.phoneNumber}"></p></td>
             </tr>
             <tr>
-                <th></th>
+                <th>ID Number</th>
                 <td><p th:text="${d.driverIdNumber}"></p></td>
             </tr>
             <tr>
-                <th></th>
+                <th>License Number</th>
                 <td><p th:text="${d.driverLicenseNumber}"></p></td>
             </tr>
             <tr>
-                <th></th>
+                <th>License Expiration Date</th>
                 <td><p th:text="${d.licenseExpDate}"></p></td>
             </tr>
+            <tr>
+                <td>
+                    <a th:href="'/users/' + ${d.username} + '/driver-edit'" class="btn btn-warning">Edit</a><br><br>
+                </td>
+                <td>
+                    <form th:action="'/users/' + ${d.id} + '/delete-driver'" method="post">
+                        <button class="btn btn-warning" type="submit">Delete Driver Account</button>
+                    </form><br><br>
+                </td>
+            </tr>
         </table>
-        <a th:href="'/users/' + ${d.username} + '/driver-edit'" class="btn btn-warning">Edit</a><br><br>
     </div>
 </div>
 </body>

@@ -71,7 +71,7 @@ public class UserOrderController {
     public String cancelOrder(@PathVariable(value = "username") String username, Model model) {
         User user = userService.getUserByUsername(username);
         Order order = orderService.getCurrentOrderByUser(user);
-        boolean result = orderService.cancelOrder(user.getId().intValue());
+        boolean result = orderService.cancelOrder(order.getId().intValue());
         Iterable<Order> orders = orderService.getOrdersByUser(user);
         model.addAttribute("orders", orders);
         model.addAttribute("user", user);

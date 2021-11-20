@@ -15,12 +15,13 @@
 </head>
 <body>
 <header>
-    <ul th:each="u : ${user}">
-        <li><a th:href="'/users/' + ${u.username} + '/add-order'">Add Order</a></li>
-        <li><a th:href="'/users/' + ${u.username} + '/history'">My Orders</a></li>
-        <li><a th:href="'/users/' + ${u.username} + '/order-page'">Current Order</a></li>
-        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
-        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+    <ul th:each="d : ${driver}">
+        <li><a th:href="'/users/' + ${d.username} + '/car'">Car</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/avail-orders'">Available Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver-history'">History of Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/current-order'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${d.username}">User Page</a></li>
         <li><a href="/auth/logout">Log Out</a></li>
     </ul>
 </header>

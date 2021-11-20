@@ -39,7 +39,7 @@ public class CarController {
             model.addAttribute("car", car);
             return "redirect:/users/{username}/car-page";
         } else {
-            model.addAttribute("user", user);
+            model.addAttribute("driver", user);
             return "redirect:/users/{username}/add";
         }
     }
@@ -48,7 +48,7 @@ public class CarController {
     public String getCarPage(@PathVariable(value = "username") String username, Model model) {
         User user = userService.getUserByUsername(username);
         Car car = carService.getCarByUser(user.getId().intValue());
-        model.addAttribute("user", user);
+        model.addAttribute("driver", user);
         model.addAttribute("car", car);
         return "cars/car-page";
     }
@@ -56,7 +56,7 @@ public class CarController {
     @GetMapping("/users/{username}/add")
     public String getCarAdding(@PathVariable(value = "username") String username, Model model) {
         User user = userService.getUserByUsername(username);
-        model.addAttribute("user", user);
+        model.addAttribute("driver", user);
         return "cars/add-car";
     }
 
@@ -75,7 +75,7 @@ public class CarController {
         log.info("Car added");
         Car car = carService.getCarByCarNumber(carNumber);
         log.info(car.toString());
-        model.addAttribute("user", user);
+        model.addAttribute("driver", user);
         model.addAttribute("car", car);
         return "redirect:/users/{username}/car-page";
     }
@@ -85,7 +85,7 @@ public class CarController {
                           @PathVariable(value = "id") Integer id, Model model) {
         User user = userService.getUserByUsername(username);
         Car car = carService.getCarById(id);
-        model.addAttribute("user", user);
+        model.addAttribute("driver", user);
         model.addAttribute("car", car);
         return "cars/edit-car";
     }
@@ -106,7 +106,7 @@ public class CarController {
         }
         Car car = carService.getCarById(id);
         User user = userService.getUserByUsername(username);
-        model.addAttribute("user", user);
+        model.addAttribute("driver", user);
         model.addAttribute("car", car);
         return "redirect:/users/{username}/car-page";
     }
@@ -123,7 +123,7 @@ public class CarController {
             return "cars/car-page";
         }
         User user = userService.getUserByUsername(username);
-        model.addAttribute("user", user);
+        model.addAttribute("driver", user);
         return "redirect:/users/{username}/driver-page";
     }
 }

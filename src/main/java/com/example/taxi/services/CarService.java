@@ -66,6 +66,14 @@ public class CarService {
         return true;
     }
 
+    public boolean deleteCarByUser(User user) {
+        Car car = carRepository.findByUser(user);
+        if (car != null) {
+            carRepository.delete(car);
+        }
+        return true;
+    }
+
     public void deleteCarByCarNumber(String carNumber) {
         Car car = carRepository.findByCarNumber(carNumber);
         assert car != null;
@@ -83,12 +91,6 @@ public class CarService {
         return true;
     }
 
-    public List<Car> getAllCars() {
-        List<Car> cars = new ArrayList<>();
-        carRepository.findAll().forEach(cars::add);
-        return cars;
-    }
-
     public Car getCarByUser(Integer id) {
         Optional<User> userOptional = userRepository.findById(id.longValue());
         User user = userOptional.orElse(null);
@@ -98,15 +100,16 @@ public class CarService {
     public boolean deleteCarByDriver(Integer id) {
         Optional<User> userOptional = userRepository.findById(id.longValue());
         User user = userOptional.orElse(null);
-        Car car = carRepository.findByUser(user);
         if (user == null) {
             return false;
         }
         log.info(user.toString());
+        Car car = carRepository.findByUser(user);
         if (car != null) {
             log.info(car.toString());
             carRepository.delete(car);
+            return true;
         }
-        return true;
+        return false;
     }
 }

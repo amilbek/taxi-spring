@@ -26,6 +26,7 @@
     <div th:each="driver : ${drivers}" class="alert alert -info mt-2">
         <p th:text="${driver.firstName + ' ' + driver.lastName}"></p>
         <p th:text="${driver.username}"></p>
+        <p th:text="${driver.isAvailable}"></p>
         <a th:href="'/admin/all-drivers/' + ${driver.id}" class="btn btn-warning">Details</a><br><br>
     </div>
 </div>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <META HTTP-EQUIV="Refresh" CONTENT="10">
     <title>Drivers</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
@@ -49,10 +50,14 @@
                     <th>Status</th>
                     <td><p th:text="${o.orderStatus}"></p></td>
                 </tr>
+                <tr>
+                    <td>
+                        <form th:action="'/users/' + ${u.username} + '/cancel-order'" method="post">
+                            <button class="btn btn-warning" type="submit">Cancel</button>
+                        </form>
+                    </td>
+                </tr>
             </table>
-            <form th:action="'/users/' + ${u.username} + '/cancel-order'" method="post">
-                <button class="btn btn-warning" type="submit">Cancel</button>
-            </form>
         </div>
     </div>
 </div>

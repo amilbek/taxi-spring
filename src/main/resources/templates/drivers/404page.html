@@ -15,19 +15,19 @@
 <body>
 <header>
     <ul th:each="d : ${driver}">
-        <li><a th:href="'/users/' + ${d.username} + '/car'" class="btn btn-warning">Car</a></li>
-        <li><a th:href="'/users/' + ${d.username} + '/avail-orders'" class="btn btn-warning">Available Orders</a></li>
-        <li><a th:href="'/users/' + ${d.username} + '/driver-history'" class="btn btn-warning">History of Orders</a></li>
-        <li><a th:href="'/users/' + ${u.username} + '/current-order'">Current Order</a></li>
-        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
-        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/car'">Car</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/avail-orders'">Available Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver-history'">History of Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/current-order'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${d.username}">User Page</a></li>
         <li><a href="/auth/logout">Log Out</a></li>
     </ul>
 </header>
 <div class="container mt-5">
-    <div th:each="u : ${user}" class="alert alert -info mt-2">
+    <div th:each="d : ${driver}" class="alert alert -info mt-2">
         <h3>You need to add car to get the orders</h3>
-        <a th:href="'/users/' + ${u.username} + '/driver'" class="btn btn-warning">Go Back</a><br><br>
+        <a th:href="'/users/' + ${d.username} + '/driver'" class="btn btn-warning">Go Back</a><br><br>
     </div>
 </div>
 </body>

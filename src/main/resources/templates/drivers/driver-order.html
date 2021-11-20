@@ -15,35 +15,67 @@
 <body>
 <header>
     <ul th:each="d : ${driver}">
-        <li><a th:href="'/users/' + ${d.username} + '/car'" class="btn btn-warning">Car</a></li>
-        <li><a th:href="'/users/' + ${d.username} + '/avail-orders'" class="btn btn-warning">Available Orders</a></li>
-        <li><a th:href="'/users/' + ${d.username} + '/driver-history'" class="btn btn-warning">History of Orders</a></li>
-        <li><a th:href="'/users/' + ${u.username} + '/current-order'">Current Order</a></li>
-        <li><a th:href="'/users/' + ${u.username} + '/driver'">Driver Page</a></li>
-        <li><a th:href="'/users/' + ${u.username}">User Page</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/car'">Car</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/avail-orders'">Available Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver-history'">History of Orders</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/current-order'">Current Order</a></li>
+        <li><a th:href="'/users/' + ${d.username} + '/driver'">Driver Page</a></li>
+        <li><a th:href="'/users/' + ${d.username}">User Page</a></li>
         <li><a href="/auth/logout">Log Out</a></li>
     </ul>
 </header>
 <div class="container mt-5">
-    <div th:text="${succeed}"></div>
-    <div th:text="${failed}"></div>
-    <div th:each="u : ${user}" class="alert alert -info mt-2">
+    <span th:text="${succeed}"></span>
+    <span th:text="${failed}"></span>
+    <div th:each="d : ${driver}" class="alert alert -info mt-2">
         <div th:each="o : ${order}" class="alert alert -info mt-2">
-            <p th:text="${o.addressFrom}"></p>
-            <p th:text="${o.addressTo}"></p>
-            <p th:text="${o.orderPrice}"></p>
-            <p th:text="${o.orderDistance}"></p>
-            <p th:text="${o.orderStatus}"></p>
-            <p th:text="${o.user.getUsername}"></p>
-            <form th:action="'/users/' + ${u.username} + '/wait-client/' + ${o.id}" method="post">
-                <button class="btn btn-warning" type="submit">Waited</button>
-            </form>
-            <form th:action="'/users/' + ${u.username} + '/start-order/' + ${o.id}" method="post">
-                <button class="btn btn-warning" type="submit">Start Order</button>
-            </form>
-            <form th:action="'/users/' + ${u.username} + '/complete-order/' + ${o.id}" method="post">
-                <button class="btn btn-warning" type="submit">Complete Order</button>
-            </form>
+            <table>
+                <tr>
+                    <th>Address From</th>
+                    <td><p th:text="${o.addressFrom}"></p></td>
+                </tr>
+                <tr>
+                    <th>Address To</th>
+                    <td><p th:text="${o.addressTo}"></p></td>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <td><p th:text="${o.orderPrice}"></p></td>
+                </tr>
+                <tr>
+                    <th>Distance</th>
+                    <td><p th:text="${o.orderDistance}"></p></td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td><p th:text="${o.orderStatus}"></p></td>
+                </tr>
+                <tr>
+                    <th>Customer</th>
+                    <td><p th:text="${o.user.getFirstName} + ' ' + ${o.user.getLastName}"></p></td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td><p th:text="${o.user.getPhoneNumber}"></p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <form th:action="'/users/' + ${d.username} + '/wait-client/' + ${o.id}" method="post">
+                            <button class="btn btn-warning" type="submit">Waited</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="'/users/' + ${d.username} + '/start-order/' + ${o.id}" method="post">
+                            <button class="btn btn-warning" type="submit">Start Order</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="'/users/' + ${d.username} + '/complete-order/' + ${o.id}" method="post">
+                            <button class="btn btn-warning" type="submit">Complete Order</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

@@ -1,12 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Taxi System</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet"
+          crossorigin="anonymous" />
+    <link rel="stylesheet"  href="/css/style.css">
 </head>
 <body>
+<div class="top-container">
     <h1>Taxi System</h1>
-    <p><a href="/auth/sign-in">Login</a></p>
-    <p><a href="/auth/signup">Sign up</a></p>
+    <table class="top-container">
+        <tr>
+            <td>
+                <p><a href="/auth/sign-in" class="btn btn-warning" button="submit">Sign in</a></p>
+            </td>
+            <td>
+                <p><a href="/auth/signup" class="btn btn-warning" button="submit">Sign up</a></p>
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

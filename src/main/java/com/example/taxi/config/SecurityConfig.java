@@ -1,5 +1,6 @@
 package com.example.taxi.config;
 
+import com.example.taxi.constants.SecurityConstants;
 import com.example.taxi.security.jwt.JwtConfigurer;
 import com.example.taxi.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**").permitAll()
                 .antMatchers("/home").permitAll()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/users/**").hasRole("USER")
+                .antMatchers("/admin/**").hasRole(SecurityConstants.ADMIN)
+                .antMatchers("/users/**").hasRole(SecurityConstants.USER)
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

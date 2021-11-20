@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.Math.sqrt;
 
@@ -65,7 +64,7 @@ public class OrderService {
             return false;
         }
         order.setDriver(driver);
-        order.setOrderStatus("accepted");
+        order.setOrderStatus(Constants.ACCEPTED_STATUS);
         orderRepository.save(order);
         return true;
     }
@@ -74,51 +73,52 @@ public class OrderService {
         Optional<Order> orderOptional = orderRepository.findById(orderId.longValue());
         Order order = orderOptional.orElse(null);
         assert order != null;
-        if (!order.getOrderStatus().equals(Constants.ACCEPTED_STATUS)) {
-            return false;
+        if (order.getOrderStatus().equals(Constants.ACCEPTED_STATUS)) {
+            order.setOrderStatus(Constants.WAITED_STATUS);
+            orderRepository.save(order);
+            return true;
         }
-        order.setOrderStatus(Constants.WAITED_STATUS);
-        orderRepository.save(order);
-        return true;
+        return false;
     }
 
     public boolean startOrder(Integer id) {
         Optional<Order> orderOptional = orderRepository.findById(id.longValue());
         Order order = orderOptional.orElse(null);
         assert order != null;
-        if (!order.getOrderStatus().equals(Constants.ACCEPTED_STATUS)) {
-            return false;
+        if (order.getOrderStatus().equals(Constants.ACCEPTED_STATUS) ||
+                order.getOrderStatus().equals(Constants.WAITED_STATUS)) {
+            order.setOrderStatus(Constants.STARTED_STATUS);
+            order.setOrderStartTime(dateTimeFormatter());
+            orderRepository.save(order);
+            return true;
         }
-        order.setOrderStatus(Constants.STARTED_STATUS);
-        order.setOrderStartTime(dateTimeFormatter());
-        orderRepository.save(order);
-        return true;
-    }
-
-    public boolean cancelOrder(Integer id) {
-        Optional<Order> orderOptional = orderRepository.findById(id.longValue());
-        Order order = orderOptional.orElse(null);
-        assert order != null;
-        if (!order.getOrderStatus().equals(Constants.ORDERED_STATUS)) {
-            return false;
-        }
-        order.setOrderStatus(Constants.CANCELED_STATUS);
-        order.setOrderEndTime(dateTimeFormatter());
-        orderRepository.save(order);
-        return true;
+        return false;
     }
 
     public boolean completeOrder(Integer id) {
         Optional<Order> orderOptional = orderRepository.findById(id.longValue());
         Order order = orderOptional.orElse(null);
         assert order != null;
-        if (!order.getOrderStatus().equals(Constants.STARTED_STATUS)) {
-            return false;
+        if (order.getOrderStatus().equals(Constants.STARTED_STATUS)) {
+            order.setOrderStatus(Constants.COMPLETED_STATUS);
+            order.setOrderEndTime(dateTimeFormatter());
+            orderRepository.save(order);
+            return true;
         }
-        order.setOrderStatus(Constants.COMPLETED_STATUS);
-        order.setOrderEndTime(dateTimeFormatter());
-        orderRepository.save(order);
-        return true;
+        return false;
+    }
+
+    public boolean cancelOrder(Integer id) {
+        Optional<Order> orderOptional = orderRepository.findById(id.longValue());
+        Order order = orderOptional.orElse(null);
+        assert order != null;
+        if (order.getOrderStatus().equals(Constants.ORDERED_STATUS)) {
+            order.setOrderStatus(Constants.CANCELED_STATUS);
+            order.setOrderEndTime(dateTimeFormatter());
+            orderRepository.save(order);
+            return true;
+        }
+        return false;
     }
 
     public double getDistance() {
@@ -173,7 +173,9 @@ public class OrderService {
         List<Order> orders = new ArrayList<>();
         orderRepository.findAll().forEach(orders::add);
         for (Order order : orders) {
-            if (order.getUser().equals(user) && order.getOrderStatus().equals(Constants.ORDERED_STATUS)) {
+            if (order.getUser().equals(user) &&
+                            (!order.getOrderStatus().equals(Constants.COMPLETED_STATUS) &&
+                                    !order.getOrderStatus().equals(Constants.CANCELED_STATUS))) {
                 return order;
             }
         }
@@ -229,27 +231,16 @@ public class OrderService {
         return orders;
     }
 
-    public boolean deleteOrdersByUser(Integer id) {
-        Optional<User> userOptional = userRepository.findById(id.longValue());
-        User user = userOptional.orElse(null);
-        if (user == null) {
-            return false;
-        }
+    public boolean deleteOrdersByUser(User user) {
         List<Order> orders = new ArrayList<>();
         orderRepository.findAll().forEach(order -> {
-            if (order.getUser().equals(user)) {
+            if (order.getUser().equals(user) ||
+                    (order.getDriver() != null &&
+                    order.getDriver().equals(user))) {
                 orders.add(order);
             }
         });
-        log.info(user.toString());
-        if (!orders.isEmpty()) {
-            for (Order order : orders) {
-                log.info(order.toString());
-            }
-            for (Order order : orders) {
-                orderRepository.delete(order);
-            }
-        }
+        orderRepository.deleteAll(orders);
         return true;
     }
 }

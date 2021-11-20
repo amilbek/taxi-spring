@@ -41,7 +41,7 @@ public class AdminController {
             return "auth/user-login";
         }
         log.info(admin.toString());
-        model.addAttribute("user", admin);
+        model.addAttribute("admin", admin);
         return "admin/admin";
     }
 
@@ -96,9 +96,10 @@ public class AdminController {
 
     @PostMapping("/admin/delete-user/{id}")
     public String deleteUser(@PathVariable(value = "id") Integer id, Model model) {
-        boolean result1 = orderService.deleteOrdersByUser(id);
-        boolean result2 = carService.deleteCarByDriver(id);
-        boolean result3 = userService.deleteUser(id);
+        User user = userService.getUser(id);
+        boolean result1 = carService.deleteCarByUser(user);
+        boolean result2 = orderService.deleteOrdersByUser(user);
+        boolean result3 = userService.deleteUser(user);
         if (!result1 || !result2 || !result3) {
             model.addAttribute("failed", Constants.SOMETHING_WRONG);
             return "redirect:/admin/all-users/{id}";
