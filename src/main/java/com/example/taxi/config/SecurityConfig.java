@@ -37,11 +37,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(SecurityConstants.URLS).permitAll()
                 .antMatchers(SecurityConstants.HOME_URL).permitAll()
                 .antMatchers(SecurityConstants.AUTH_URLS).permitAll()
-                .antMatchers(SecurityConstants.ADMIN_URLS).hasRole(SecurityConstants.ADMIN)
-                .antMatchers(SecurityConstants.USERS_URLS).hasRole(SecurityConstants.USER)
+                .antMatchers(SecurityConstants.ADMIN_URLS).hasAuthority(SecurityConstants.ADMIN)
+                .antMatchers(SecurityConstants.USERS_URLS).hasAuthority(SecurityConstants.USER)
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

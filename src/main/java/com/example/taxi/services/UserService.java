@@ -102,7 +102,19 @@ public class UserService {
         return true;
     }
 
-    public boolean changeStatus(DriverStatusRequest driverStatusRequest) {
+    public boolean activeDriver(DriverStatusRequest driverStatusRequest) {
+        Optional<User> userOptional =
+                userRepository.findById(driverStatusRequest.getDriverId().longValue());
+        User user = userOptional.orElse(null);
+        if (user == null) {
+            return false;
+        }
+        user.setIsAvailable(driverStatusRequest.getDriverStatus());
+        userRepository.save(user);
+        return true;
+    }
+
+    public boolean nonActiveDriver(DriverStatusRequest driverStatusRequest) {
         Optional<User> userOptional =
                 userRepository.findById(driverStatusRequest.getDriverId().longValue());
         User user = userOptional.orElse(null);

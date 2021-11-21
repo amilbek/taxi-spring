@@ -141,6 +141,6 @@ public class DriverOrderController {
         Order order = orderService.getOrder(id);
         model.addAttribute("driver", user);
         model.addAttribute("order", order);
-        return "drivers/driver-order";
+        return "drivers/order-detail";
     }
 }

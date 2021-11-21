@@ -13,10 +13,8 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Validated
 @Log
 @Controller
 public class AdminController {
@@ -49,7 +47,7 @@ public class AdminController {
     public String changeDriverStatus(@PathVariable(value = "id") Integer driverId,
                                      Model model) {
         DriverStatusRequest driverStatusRequest = new DriverStatusRequest(driverId, true);
-        boolean result = userService.changeStatus(driverStatusRequest);
+        boolean result = userService.activeDriver(driverStatusRequest);
         User user = userService.getUser(driverId);
         if (!result) {
             model.addAttribute("failed", Constants.SOMETHING_WRONG);
@@ -110,7 +108,7 @@ public class AdminController {
     @PostMapping("/admin/delete-driver/{id}")
     public String deleteDriver(@PathVariable(value = "id") Integer id, Model model) {
         DriverStatusRequest driverStatusRequest = new DriverStatusRequest(id, false);
-        boolean result = userService.changeStatus(driverStatusRequest);
+        boolean result = userService.nonActiveDriver(driverStatusRequest);
         if (!result) {
             model.addAttribute("failed", Constants.SOMETHING_WRONG);
             return "redirect:/admin/all-drivers/{id}";

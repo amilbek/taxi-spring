@@ -56,7 +56,7 @@
                     <a th:href="'/users/' + ${d.username} + '/driver-edit'" class="btn btn-warning">Edit</a><br><br>
                 </td>
                 <td>
-                    <form th:action="'/users/' + ${d.id} + '/delete-driver'" method="post">
+                    <form th:action="'/users/' + ${d.username} + '/delete-driver'" method="post">
                         <button class="btn btn-warning" type="submit">Delete Driver Account</button>
                     </form><br><br>
                 </td>

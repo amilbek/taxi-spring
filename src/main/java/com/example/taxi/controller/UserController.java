@@ -21,13 +21,11 @@ public class UserController {
 
     private final UserService userService;
     private final OrderService orderService;
-    private final CarService carService;
 
     @Autowired
-    public UserController(UserService userService, OrderService orderService, CarService carService) {
+    public UserController(UserService userService, OrderService orderService) {
         this.userService = userService;
         this.orderService = orderService;
-        this.carService = carService;
     }
 
     @GetMapping("/users/{username}")

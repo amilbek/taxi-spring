@@ -27,13 +27,11 @@ public class DriverController {
 
     private final UserService userService;
     private final OrderService orderService;
-    private final CarService carService;
 
     @Autowired
-    public DriverController(UserService userService, OrderService orderService, CarService carService) {
+    public DriverController(UserService userService, OrderService orderService) {
         this.userService = userService;
         this.orderService = orderService;
-        this.carService = carService;
     }
 
     @GetMapping("/users/{username}/driver")
@@ -127,17 +125,17 @@ public class DriverController {
         return "drivers/driver-history";
     }
 
-    @PostMapping("/users/{id}/delete-driver")
-    public String deleteUser(@PathVariable(value = "id") Integer id, Model model) {
-        User user = userService.getUser(id);
+    @PostMapping("/users/{username}/delete-driver")
+    public String deleteUser(@PathVariable(value = "username") String username, Model model) {
+        User user = userService.getUserByUsername(username);
         DriverStatusRequest driverStatusRequest =
                 new DriverStatusRequest(Math.toIntExact(user.getId()), false);
-        boolean result = userService.changeStatus(driverStatusRequest);
+        boolean result = userService.nonActiveDriver(driverStatusRequest);
         if (!result) {
             log.info(user.toString());
             model.addAttribute("user", user);
             model.addAttribute("failed", Constants.DELETING_FAILED);
-            return "drivers/driver-page";
+            return "redirect:/users/{username}/driver-page";
         }
         log.info("User deleted");
         model.addAttribute("user", user);

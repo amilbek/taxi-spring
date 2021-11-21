@@ -41,7 +41,8 @@ public class UserOrderController {
         boolean result = orderService.saveOrder(orderRequest, username);
         if (!result) {
             model.addAttribute("failed", Constants.SOMETHING_WRONG);
-            return "orders/add-order";
+            model.addAttribute("user", user);
+            return "redirect:/users/{username}/add-order";
         }
         Order order = orderService.getCurrentOrderByUser(user);
         log.info(order.toString());

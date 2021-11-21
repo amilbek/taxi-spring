@@ -4,6 +4,7 @@ import com.example.taxi.constants.Constants;
 import com.example.taxi.entity.Car;
 import com.example.taxi.entity.Order;
 import com.example.taxi.entity.User;
+import com.example.taxi.enums.Status;
 import com.example.taxi.models.OrderRequest;
 import com.example.taxi.repository.CarRepository;
 import com.example.taxi.repository.OrderRepository;
@@ -40,6 +41,13 @@ public class OrderService {
         Order order = new Order(orderRequest.getAddressFrom(), orderRequest.getAddressTo(),
                 getDistance(), orderRequest.getTariff(), getPrice(orderRequest.getTariff()));
         User user = userRepository.findByUsername(username);
+        List<Order> orders = new ArrayList<>();
+        orderRepository.findAll().forEach(orders::add);
+        for (Order o : orders) {
+            if (o.getUser().equals(user) && !o.getOrderStatus().equals(Constants.COMPLETED_STATUS)) {
+                return false;
+            }
+        }
         User driver = userRepository.findByUsername(Constants.DEFAULT_DRIVER);
         order.setUser(user);
         order.setDriver(driver);
@@ -52,9 +60,16 @@ public class OrderService {
     }
 
     public boolean acceptOrder(String username, Integer id) {
+        User driver = userRepository.findByUsername(username);
+        List<Order> orders = new ArrayList<>();
+        orderRepository.findAll().forEach(orders::add);
+        for (Order o : orders) {
+            if (o.getDriver().equals(driver) && !o.getOrderStatus().equals(Constants.COMPLETED_STATUS)) {
+                return false;
+            }
+        }
         Optional<Order> orderOptional = orderRepository.findById(id.longValue());
         Order order = orderOptional.orElse(null);
-        User driver = userRepository.findByUsername(username);
         Car car = carRepository.findByUser(driver);
         assert driver != null;
         assert order != null;
@@ -224,25 +239,11 @@ public class OrderService {
         }
         orderRepository.findAll().forEach(order -> {
             if (order.getOrderStatus().equals(Constants.ORDERED_STATUS) &&
-                    order.getTariff().equals(car.getTariff())) {
+                    order.getTariff().equals(car.getTariff()) &&
+                    order.getUser().getStatus().equals(Status.ACTIVE)) {
                 orders.add(order);
             }
         });
         return orders;
-    }
-
-    public boolean deleteOrdersByUser(User user) {
-        List<Order> orders = new ArrayList<>();
-        orderRepository.findAll().forEach(order -> {
-            if (order.getUser().equals(user) ||
-                    (order.getDriver() != null &&
-                    order.getDriver().equals(user))) {
-                orders.add(order);
-            }
-        });
-        for (Order order : orders) {
-            orderRepository.delete(order);
-        }
-        return true;
     }
 }
