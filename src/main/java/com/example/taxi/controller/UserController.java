@@ -82,10 +82,8 @@ public class UserController {
     @PostMapping("/users/{id}/delete")
     public String deleteUser(@PathVariable(value = "id") Integer id, Model model) {
         User user = userService.getUser(id);
-        boolean result1 = carService.deleteCarByUser(user);
-        boolean result2 = orderService.deleteOrdersByUser(user);
-        boolean result3 = userService.deleteUser(user);
-        if (!result1 || !result2 || !result3) {
+        boolean result = userService.deleteUser(user);
+        if (!result) {
             log.info(user.toString());
             model.addAttribute("user", user);
             model.addAttribute("failed", Constants.DELETING_FAILED);

@@ -2,7 +2,7 @@ package com.example.taxi.services;
 
 import com.example.taxi.constants.Constants;
 import com.example.taxi.entity.Role;
-import com.example.taxi.entity.Status;
+import com.example.taxi.enums.Status;
 import com.example.taxi.entity.User;
 import com.example.taxi.helpers.PasswordValidationHelper;
 import com.example.taxi.helpers.ValidateHelper;
@@ -75,13 +75,18 @@ public class UserService {
     }
 
     public boolean deleteUser(User user) {
-        userRepository.delete(user);
+        user.setStatus(Status.BANNED);
+        userRepository.save(user);
         return true;
     }
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
+        userRepository.findAll().forEach(user -> {
+            if (user.getStatus().equals(Status.ACTIVE)) {
+                users.add(user);
+            }
+        });
         return users;
     }
 
@@ -105,6 +110,10 @@ public class UserService {
             return false;
         }
         user.setIsAvailable(driverStatusRequest.getDriverStatus());
+        user.setIsDriver(false);
+        user.setDriverIdNumber(null);
+        user.setDriverLicenseNumber(null);
+        user.setLicenseExpDate(null);
         userRepository.save(user);
         return true;
     }
@@ -112,7 +121,7 @@ public class UserService {
     public List<User> getAllDrivers() {
         List<User> users = new ArrayList<>();
         userRepository.findAll().forEach(user -> {
-            if (Boolean.TRUE.equals(user.getIsDriver())) {
+            if (Boolean.TRUE.equals(user.getIsDriver()) && user.getStatus().equals(Status.ACTIVE)) {
                 users.add(user);
             }
         });

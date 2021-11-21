@@ -2,6 +2,7 @@ package com.example.taxi.security.jwt;
 
 import com.example.taxi.entity.Role;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
@@ -85,8 +87,17 @@ public class JwtTokenProvider {
             }
 
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+        } catch (ExpiredJwtException expEx) {
+            log.info("Token expired");
+        } catch (UnsupportedJwtException unsEx) {
+            log.info("Unsupported jwt");
+        } catch (MalformedJwtException mjEx) {
+            log.info("Malformed jwt");
+        } catch (SignatureException sEx) {
+            log.info("Invalid signature");
+        } catch (Exception e) {
+            log.info("invalid token");
         }
+        return false;
     }
 }

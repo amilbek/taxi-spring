@@ -2,6 +2,7 @@ package com.example.taxi.controller;
 
 import com.example.taxi.constants.Constants;
 import com.example.taxi.entity.User;
+import com.example.taxi.enums.Status;
 import com.example.taxi.models.UserRequest;
 import com.example.taxi.security.jwt.JwtTokenProvider;
 import com.example.taxi.services.UserService;
@@ -82,7 +83,10 @@ public class AuthController {
             if (username.equals("admin")) {
                 return "redirect:/admin/" + username;
             }
-
+            if (user.getStatus().equals(Status.BANNED)) {
+                model.addAttribute("failed", Constants.LOGIN_FAILED);
+                return "auth/user-login";
+            }
             return "redirect:/users/" + username;
         } catch (AuthenticationException e) {
             model.addAttribute("failed", Constants.LOGIN_FAILED);

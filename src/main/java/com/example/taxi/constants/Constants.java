@@ -16,12 +16,8 @@ public class Constants {
     public static final String SOMETHING_WRONG = "Something wrong";
     public static final String CANCELED_SUCCESSFULLY = "Your ordered was canceled successfully";
     public static final String ACCEPTED_SUCCESSFULLY = "You accepted the order successfully";
-    public static final String START_ORDER = "Your move was started";
-    public static final String COMPLETED_SUCCESSFULLY = "Your move was finished. Thank you:)";
     public static final String ROLE_USER = "ROLE_USER";
     public static final String NOT_ACCEPTED = "You have not got Driver status yet";
-    public static final String NOT_COMPLETED = "You have not started move yet";
-    public static final String ORDER_ACCEPTED = "Your order have already accepted";
     public static final String ORDERED_STATUS = "ordered";
     public static final String ACCEPTED_STATUS = "accepted";
     public static final String CANCELED_STATUS = "canceled";

@@ -1,7 +1,7 @@
 package com.example.taxi.security.jwt;
 
 import com.example.taxi.entity.Role;
-import com.example.taxi.entity.Status;
+import com.example.taxi.enums.Status;
 import com.example.taxi.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

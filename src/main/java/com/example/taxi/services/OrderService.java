@@ -240,7 +240,9 @@ public class OrderService {
                 orders.add(order);
             }
         });
-        orderRepository.deleteAll(orders);
+        for (Order order : orders) {
+            orderRepository.delete(order);
+        }
         return true;
     }
 }

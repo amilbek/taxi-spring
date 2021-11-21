@@ -1,5 +1,6 @@
 package com.example.taxi.entity;
 
+import com.example.taxi.enums.Status;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;

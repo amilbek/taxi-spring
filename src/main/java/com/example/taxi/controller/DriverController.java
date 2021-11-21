@@ -130,16 +130,18 @@ public class DriverController {
     @PostMapping("/users/{id}/delete-driver")
     public String deleteUser(@PathVariable(value = "id") Integer id, Model model) {
         User user = userService.getUser(id);
-        boolean result1 = carService.deleteCarByUser(user);
-        DriverStatusRequest driverStatusRequest = new DriverStatusRequest(Math.toIntExact(user.getId()), false);
-        boolean result2 = userService.changeStatus(driverStatusRequest);
-        if (!result1 || !result2) {
+        DriverStatusRequest driverStatusRequest =
+                new DriverStatusRequest(Math.toIntExact(user.getId()), false);
+        boolean result = userService.changeStatus(driverStatusRequest);
+        if (!result) {
             log.info(user.toString());
             model.addAttribute("user", user);
             model.addAttribute("failed", Constants.DELETING_FAILED);
-            return "users/user-page";
+            return "drivers/driver-page";
         }
         log.info("User deleted");
+        model.addAttribute("user", user);
+        model.addAttribute("failed", Constants.DELETING_FAILED);
         return "redirect:/users/{username}/driver-register";
     }
 }
