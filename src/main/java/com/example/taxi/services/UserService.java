@@ -33,15 +33,32 @@ public class UserService {
             return false;
         }
 
+        if (!PasswordValidationHelper.passwordValidation(userRequest.getPassword())) {
+            return false;
+        }
+
         User byPhoneNumber = userRepository.findByPhoneNumber(userRequest.getPhoneNumber());
         User byUsername = userRepository.findByUsername(userRequest.getUsername());
+        if (byUsername != null && byUsername.getUsername().equals(userRequest.getUsername()) &&
+                byUsername.getPhoneNumber().equals(userRequest.getPhoneNumber()) &&
+                byUsername.getStatus().equals(Status.BANNED)) {
+            byUsername.setStatus(Status.ACTIVE);
+            userRepository.save(byUsername);
+            return true;
+        }
+
+        if (byPhoneNumber != null && byPhoneNumber.getUsername().equals(userRequest.getUsername()) &&
+                byPhoneNumber.getPhoneNumber().equals(userRequest.getPhoneNumber()) &&
+                byPhoneNumber.getStatus().equals(Status.BANNED)) {
+            byPhoneNumber.setStatus(Status.ACTIVE);
+            userRepository.save(byPhoneNumber);
+            return true;
+        }
+
         if (byUsername != null || byPhoneNumber != null) {
             return false;
         }
 
-        if (!PasswordValidationHelper.passwordValidation(userRequest.getPassword())) {
-            return false;
-        }
         User user = new User(userRequest.getFirstName(), userRequest.getLastName(),
                 userRequest.getPhoneNumber(), userRequest.getUsername(), userRequest.getPassword());
         Role roleAdmin = roleRepository.findByName(Constants.ROLE_USER);
