@@ -1,6 +1,7 @@
 package com.example.taxi.controller;
 
 import com.example.taxi.constants.Constants;
+import com.example.taxi.constants.SecurityConstants;
 import com.example.taxi.entity.User;
 import com.example.taxi.enums.Status;
 import com.example.taxi.models.UserRequest;
@@ -80,7 +81,7 @@ public class AuthController {
             model.addAttribute("greeting", greeting);
             model.addAttribute("user", user);
 
-            if (username.equals("admin")) {
+            if (user.getRole().getName().equals("ROLE_ADMIN")) {
                 return "redirect:/admin/" + username;
             }
             if (user.getStatus().equals(Status.BANNED)) {

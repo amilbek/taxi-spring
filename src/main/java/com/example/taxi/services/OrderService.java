@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -245,5 +246,20 @@ public class OrderService {
             }
         });
         return orders;
+    }
+
+    public Double rateOrder(User driver, Double rating) {
+        Double averageRate = driver.getRating();
+        List<Order> orders = getOrdersByDriver(driver);
+        int orderNumber = 0;
+        if (!orders.isEmpty()) {
+            orderNumber = orders.size();
+        }
+        Double newAverageRating = (averageRate + rating) / orderNumber + 1;
+        log.info("newAverageRating: {}", newAverageRating);
+        DecimalFormat df = new DecimalFormat("#,##");
+        driver.setRating(Double.valueOf(df.format(newAverageRating)));
+        userRepository.save(driver);
+        return newAverageRating;
     }
 }

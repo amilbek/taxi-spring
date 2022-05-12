@@ -84,4 +84,16 @@ public class UserOrderController {
         model.addAttribute("success", Constants.CANCELED_SUCCESSFULLY);
         return "users/user-history";
     }
+
+    @PostMapping("/users/{username}/{id}/rating")
+    public String rateDriver(@PathVariable(value = "id") String id,
+                             @PathVariable(value = "username") String username,
+                             @RequestParam String rating,
+                             Model model)  {
+        Order order = orderService.getOrder(Integer.valueOf(id));
+        User driver = order.getDriver();
+        Double newAverageRating = orderService.rateOrder(driver, Double.valueOf(rating));
+        model.addAttribute("rating", newAverageRating);
+        return "redirect:/users/{username}/history";
+    }
 }

@@ -52,6 +52,10 @@
                 <td><p th:text="${d.licenseExpDate}"></p></td>
             </tr>
             <tr>
+                <th>Average Rating</th>
+                <td><p th:text="${d.rating}"></p></td>
+            </tr>
+            <tr>
                 <td>
                     <a th:href="'/users/' + ${d.username} + '/driver-edit'" class="btn btn-warning">Edit</a><br><br>
                 </td>

@@ -27,6 +27,7 @@ public class User {
     private Boolean isAvailable;
     private String username;
     private String password;
+    private Double rating;
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
     @Enumerated(value = EnumType.STRING)
@@ -39,6 +40,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.isDriver = false;
         this.isAvailable = false;
+        this.rating = 0.0;
         this.username = username;
         this.password = password;
     }
@@ -57,6 +59,7 @@ public class User {
                 ", isAvailable=" + isAvailable +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", rating" + rating +
                 ", role=" + role +
                 ", status=" + status +
                 '}';
