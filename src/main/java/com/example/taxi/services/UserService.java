@@ -21,19 +21,25 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ValidateHelper validateHelper;
+    private final PasswordValidationHelper passwordValidationHelper;
 
-    @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository,
+                       RoleRepository roleRepository,
+                       ValidateHelper validateHelper,
+                       PasswordValidationHelper passwordValidationHelper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.validateHelper = validateHelper;
+        this.passwordValidationHelper = passwordValidationHelper;
     }
 
     public boolean saveUser(UserRequest userRequest) {
-        if (!ValidateHelper.validatePhoneNumber(userRequest.getPhoneNumber())) {
+        if (!validateHelper.validatePhoneNumber(userRequest.getPhoneNumber())) {
             return false;
         }
 
-        if (!PasswordValidationHelper.passwordValidation(userRequest.getPassword())) {
+        if (!passwordValidationHelper.passwordValidation(userRequest.getPassword())) {
             return false;
         }
 
@@ -61,8 +67,8 @@ public class UserService {
 
         User user = new User(userRequest.getFirstName(), userRequest.getLastName(),
                 userRequest.getPhoneNumber(), userRequest.getUsername(), userRequest.getPassword());
-        Role roleAdmin = roleRepository.findByName(Constants.ROLE_USER);
-        user.setRole(roleAdmin);
+        Role roleUser = roleRepository.findByName(Constants.ROLE_USER);
+        user.setRole(roleUser);
         user.setStatus(Status.ACTIVE);
         userRepository.save(user);
         return true;
@@ -77,11 +83,10 @@ public class UserService {
     }
 
     public boolean updateUser(UserRequest userRequest) {
-        if (!ValidateHelper.validatePhoneNumber(userRequest.getPhoneNumber())) {
+        if (!validateHelper.validatePhoneNumber(userRequest.getPhoneNumber())) {
             return false;
         }
-        Optional<User> userOptional = userRepository.findById(userRequest.getId().longValue());
-        User user = userOptional.orElse(null);
+        User user = userRepository.findById(userRequest.getId().longValue()).orElse(null);
         assert user != null;
         user.setFirstName(userRequest.getFirstName());
         user.setLastName(userRequest.getLastName());

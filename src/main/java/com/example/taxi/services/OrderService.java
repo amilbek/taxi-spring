@@ -69,8 +69,7 @@ public class OrderService {
                 return false;
             }
         }
-        Optional<Order> orderOptional = orderRepository.findById(id.longValue());
-        Order order = orderOptional.orElse(null);
+        Order order = orderRepository.findById(id.longValue()).orElse(null);
         Car car = carRepository.findByUser(driver);
         assert driver != null;
         assert order != null;

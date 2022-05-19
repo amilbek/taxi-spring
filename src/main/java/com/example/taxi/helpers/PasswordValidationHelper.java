@@ -1,12 +1,11 @@
 package com.example.taxi.helpers;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PasswordValidationHelper {
 
-    private PasswordValidationHelper() {
-        throw new IllegalStateException("Utility class");
-    }
-
-    public static boolean passwordValidation(String password) {
+    public boolean passwordValidation(String password) {
         if (password.length() < 8) {
             return false;
         }
